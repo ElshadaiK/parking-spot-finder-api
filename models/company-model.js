@@ -21,7 +21,7 @@ const companySchema = new mongoose.Schema({
 
 // methods
 
-userSchema.pre('save', function preSave(next) {
+companySchema.pre('save', function preSave(next) {
     let model = this
 
     model.hashPasswd(model.password, (err, hash) => {
@@ -31,7 +31,7 @@ userSchema.pre('save', function preSave(next) {
 })
 
 
-userSchema.method({
+companySchema.method({
     verifyPassword(passwd) {
         return new Promise((resolve, reject) => {
           bcrypt.compare(passwd, this.password, (err, isMatch) => {
@@ -68,6 +68,6 @@ userSchema.method({
  
 
 // plugins
-userSchema.plugin(mongoosePaginate);
+companySchema.plugin(mongoosePaginate);
 
 module.exports = mongoose.model('Companies', companySchema);
