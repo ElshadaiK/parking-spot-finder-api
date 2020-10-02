@@ -13,6 +13,8 @@ const { hasPermissions } = require('./middlewares/auth');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var authRouter = require('./routes/auth');
+var companiesRouter = require('./routes/companies');
+
 
 var app = express();
 
@@ -68,5 +70,6 @@ app.use(jwt({ secret: jwt_key, algorithms: ['HS256']})
 app.use('/', indexRouter);
 app.use('/users', usersRouter); // autho
 app.use('/auth', authRouter);
+app.use('/companies', companiesRouter);
 
 module.exports = app;
