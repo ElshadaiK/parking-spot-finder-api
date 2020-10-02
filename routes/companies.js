@@ -22,7 +22,7 @@ const companyController = require('../controllers/company.controller')
  * @returns {object} 200 - Array of users
  * @returns {Error}  default - Unexpected error
  */
-router.get('/', hasPermissions(['view any company', 'view company']),companyController.All);
+router.get('/', hasPermissions(['view any company', 'view company']),companyController.AllProfiles);
 
 /**
  * Create a new user 
@@ -34,7 +34,7 @@ router.get('/', hasPermissions(['view any company', 'view company']),companyCont
  * @returns {object} 200 - User object
  * @returns {Error}  default - Unexpected error
  */
-router.get('/:id', hasPermissions(['view company']),companyController.get);
+router.get('/:id', hasPermissions(['view company']),companyController.retriveProfile);
 
 
 /**
@@ -47,7 +47,7 @@ router.get('/:id', hasPermissions(['view company']),companyController.get);
  * @returns {object} 200 - User object
  * @returns {Error}  default - Unexpected error
  */
-router.post('/', hasPermissions(['create company']) && userFormRequest('createUser'), companyController.create);
+router.post('/', hasPermissions(['create company']) && userFormRequest('createUser'), companyController.createProfile);
 
 /**
  * Update an existing user by id 
@@ -60,7 +60,7 @@ router.post('/', hasPermissions(['create company']) && userFormRequest('createUs
  * @returns {USER.model} 200 - User object
  * @returns {Error}  default - Unexpected error
  */
-router.patch('/:id', hasPermissions(['update company']), companyController.update);
+router.patch('/:id', hasPermissions(['update company']), companyController.updateProfile);
 
 /**
  * Remove a new user  with id
@@ -72,6 +72,6 @@ router.patch('/:id', hasPermissions(['update company']), companyController.updat
  * @returns {object} 200 - User object
  * @returns {Error}  default - Unexpected error
  */
-router.delete('/:id', hasPermissions(['remove company']),companyController.remove);
+router.delete('/:id', hasPermissions(['remove company']),companyController.removeProfile);
 
 module.exports = router;

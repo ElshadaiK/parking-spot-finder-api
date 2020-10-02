@@ -12,9 +12,11 @@ const companySchema = new mongoose.Schema({
     push_token: { type: String, default: '' },
     charge: {type: Number, required: true},
     floor: {type: Number, default: 1},
-    slots: {type: Number},
+    slots: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Slots' }],
     rank: {type: Number, min: 0, max: 5},
-    created_at: { type: Date, default: new Date() }
+    created_at: { type: Date, default: new Date() },
+    opens_at: {type: Date, required: true},
+    closes_at: {type: Date, required: true}
 })
 
 // methods
@@ -68,4 +70,4 @@ userSchema.method({
 // plugins
 userSchema.plugin(mongoosePaginate);
 
-module.exports = mongoose.model('Company', companySchema);
+module.exports = mongoose.model('Companies', companySchema);

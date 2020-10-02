@@ -5,4 +5,4 @@ const SlotSchema = new mongoose.Schema({
     flag: {type: Boolean, default: false}
 });
 
-module.exports = mongoose.model('Permissions', SlotSchema);
+module.exports = mongoose.model('Slots', SlotSchema);

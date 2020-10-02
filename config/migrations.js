@@ -61,10 +61,8 @@ const roles = {
         'view slot',
         'update slot',
 
-        'create officer',
         'view officer',
         'update officer',
-        'remove officer',
     ]
 }
 
