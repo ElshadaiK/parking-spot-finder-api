@@ -5,21 +5,31 @@ const permissions = [
     'update user',
     'remove user',
 
-    'create company user',
-    'view company user',
-    'update company user',
-    'remove company user',
+    'create company',
+    'view company',
+    'view any company',
+    'update company',
+    'remove company',
 
     'create role',
     'view any role',
     'view role',
     'update role',
     'remove role',
+
+    'view any slot',
+    'view slot',
+    'update slot',
 ]
 
 const roles = {
     admin: [...permissions],
-    user: [],
+    user: [
+        'create user',
+        'view slot',
+        'view user',
+        'update user',
+    ],
     manager: [
         'create company user',
         'view company user',
@@ -27,7 +37,9 @@ const roles = {
         'remove company user',
     ],
     parking_officer: [
-        'view company user'
+        'view any slot',
+        'view slot',
+        'update slot',
     ]
 }
 
@@ -37,6 +49,12 @@ const users = [
         email: 'super@admin.com',
         password: 'superuser',
         roles: ['admin']
+    },
+    {
+        username: 'manager',
+        email: 'main@manager.com',
+        password: 'superuser',
+        roles: ['manager']
     }
 ]
 
