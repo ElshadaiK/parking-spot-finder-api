@@ -144,5 +144,74 @@ router.patch('officer/:id', hasPermissions(['update officer']), companyControlle
  */
 router.delete('officers/:id', hasPermissions(['remove officer']),companyController.removeOfficer);
 
+/**
+ * @typedef SLOTS
+ * @property {string} company.required - Company's name
+ */
+
+/**
+ * Returns ALL slots
+ * 
+ * @route GET /companies/slots
+ * @group SLOTS - Deals with all CRUD operations with slot model
+ * @param {string} sort.query - sort parament
+ * @param {string} page.query - set the page number
+ * @param {string} filter.query - set filter query 
+ * @security JWT
+ * @returns {object} 200 - Array of slots
+ * @returns {Error}  default - Unexpected error
+ */
+router.get('/slots', hasPermissions(['view any slot', 'view slot']),companyController.AllSlots);
+
+/**
+ * Create a new slot 
+ * 
+ * @route GET /companies/slots/{id}
+ * @group SLOTS 
+ * @param {string} id.path.required - slot id
+ * @security JWT
+ * @returns {object} 200 - slots object
+ * @returns {Error}  default - Unexpected error
+ */
+router.get('slots/:id', hasPermissions(['view slot']),companyController.retriveSlot);
+
+
+/**
+ * Create a slot user 
+ * 
+ * @route POST /companies/slots/
+ * @group SLOTS 
+ * @param {SLOTS.model} slots.body.required - the slots user
+ * @security JWT
+ * @returns {object} 200 - slots object
+ * @returns {Error}  default - Unexpected error
+ */
+router.post('/slots', hasPermissions(['create slot']) && userFormRequest('createUser'), companyController.createSlot);
+
+/**
+ * Update an existing slots by id 
+ * 
+ * @route PATCH /companies/slots/:id
+ * @group SLOTS
+ * @param {string} id.path.required - slots id
+ * @param {SLOTS.model} slots.body - the new slot object
+ * @security JWT
+ * @returns {SLOTS.model} 200 - slot object
+ * @returns {Error}  default - Unexpected error
+ */
+router.patch('slots/:id', hasPermissions(['update slot']), companyController.updateSlot);
+
+/**
+ * Remove a new slots  with id
+ * 
+ * @route DELETE /companies/slots/{id}
+ * @group SLOTS 
+ * @param {string} id.path.required - slots id
+ * @security JWT
+ * @returns {object} 200 - slot object
+ * @returns {Error}  default - Unexpected error
+ */
+router.delete('slots/:id', hasPermissions(['remove slot']),companyController.removeSlot);
+
 
 module.exports = router;
