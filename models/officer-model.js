@@ -20,4 +20,4 @@ const OfficerSchema = new mongoose.Schema({
     updated_at: { type: Date, default: new Date() }
 });
 
-module.exports = mongoose.model('Slots', OfficerSchema);
+module.exports = mongoose.model('Officer', OfficerSchema);

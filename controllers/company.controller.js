@@ -4,6 +4,8 @@ const companyModel = require('../models/company-model');
 
 const officerModel = require('../models/officer-model');
 
+const slotModel = require('../models/slot-model');
+
 // Companies' CRUD
 exports.AllProfiles = async (req, res) => {
 
@@ -248,7 +250,7 @@ exports.AllSlots = async (req, res) => {
             limit: req.query.limit || 10,
             populate: { path: 'roles', populate: {path: 'permissions'}}
         }
-        const users = await userModel.paginate(query,options)
+        const users = await slotModel.paginate(query,options)
 
         res.json(users)
 
@@ -265,7 +267,7 @@ exports.retriveSlot = async (req, res) => {
 
     try {
         console.log(req.params);
-        const user = await userModel.findById(req.params.id)
+        const user = await slotModel.findById(req.params.id)
         res.json(user)
     } catch (error) {
         res.status(404).json({
@@ -279,7 +281,7 @@ exports.retriveSlot = async (req, res) => {
 exports.createSlot = async (req, res) => {
     try {
 
-        const user = await userModel.create(req.body)
+        const user = await slotModel.create(req.body)
 
         res.json(user)
     } catch (error) {
@@ -294,9 +296,9 @@ exports.createSlot = async (req, res) => {
 exports.updateSlot = async (req, res) => {
 
     try {
-        let user = await userModel.findById(req.params.id)
+        let user = await slotModel.findById(req.params.id)
         if(user) {
-            user = await userModel.updateOne({_id: user._id}, req.body)
+            user = await slotModel.updateOne({_id: user._id}, req.body)
             return res.json(user)
         }
 
@@ -314,9 +316,9 @@ exports.updateSlot = async (req, res) => {
 
 exports.removeSlot = async (req, res) => {
     try {
-        let user = await userModel.findById(req.params.id)
+        let user = await slotModel.findById(req.params.id)
         if(user) {
-            await userModel.remove({
+            await slotModel.remove({
                 _id: user._id
             })
             return res.json(user)
