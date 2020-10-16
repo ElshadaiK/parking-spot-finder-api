@@ -6,7 +6,7 @@ const companyController = require('../controllers/company.controller')
 
 /**
  * @typedef COMPANY
- * @property {string} username.required - A Unique user name
+ * @property {string} name.required - A Unique name
  * @property {string} email.required - A Unique email name
  * @property {string} password.required - A strong password
  */

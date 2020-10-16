@@ -8,6 +8,8 @@ const OfficerSchema = new mongoose.Schema({
     password_changed_at: { type: Date },
     active: { type: Boolean, default: true },
     push_token: { type: String, default: '' },
+    roles: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Roles' }],
+    permissions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Permissions' }],
     
     archived: { type: Boolean, default: false },
     last_login: { type: Date },

@@ -10,6 +10,8 @@ const companySchema = new mongoose.Schema({
     password_changed_at: { type: Date },
     active: { type: Boolean, default: true },
     push_token: { type: String, default: '' },
+    roles: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Roles' }],
+    permissions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Permissions' }],
     charge: {type: Number, required: true},
     floor: {type: Number, default: 1},
     slots: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Slots' }],
