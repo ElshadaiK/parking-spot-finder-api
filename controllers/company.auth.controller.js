@@ -10,7 +10,7 @@ exports.login = async (req, res) => {
     try {
         const company = await companyModel.findOne({
             email: req.body.email
-        });
+        }).populate({ path: 'roles', populate: {path: 'permissions'} });
 
         if(company && await company.verifyPassword(req.body.password)){
             let permissions =  company._doc.roles.reduce((prev, next) => {

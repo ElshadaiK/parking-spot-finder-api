@@ -104,7 +104,7 @@ router.get('/officers', hasPermissions(['view any officer', 'view officer']),com
  * @returns {object} 200 - officer object
  * @returns {Error}  default - Unexpected error
  */
-router.get('/:id', hasPermissions(['view officer']),companyController.retriveOfficer);
+router.get('officers/:id', hasPermissions(['view officer']),companyController.retriveOfficer);
 
 
 /**
@@ -117,7 +117,7 @@ router.get('/:id', hasPermissions(['view officer']),companyController.retriveOff
  * @returns {object} 200 - officer object
  * @returns {Error}  default - Unexpected error
  */
-router.post('/', hasPermissions(['create officer']) && companyFormRequest('createOfficer'), companyController.createOfficer);
+router.post('officers/', hasPermissions(['create officer']) && companyFormRequest('createOfficer'), companyController.createOfficer);
 
 /**
  * Update an existing officer by id 

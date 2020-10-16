@@ -55,6 +55,8 @@ const roles = {
         'view officer',
         'update officer',
         'remove officer',
+
+        'view company'
     ],
     parking_officer: [
         'view any slot',
