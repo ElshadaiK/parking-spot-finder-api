@@ -104,7 +104,7 @@ exports.removeProfile = async (req, res) => {
             })
             return res.json(company)
         }
-        throw new Error('Company doesn\t exist')
+        throw new Error('Company doesn\'t exist')
 
     } catch (error) {
         

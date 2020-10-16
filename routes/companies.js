@@ -1,6 +1,6 @@
 var router = require("express-promise-router")();
 
-const  {userFormRequest} = require('../middlewares/form-request/user')
+const  {companyFormRequest} = require('../middlewares/form-request/company')
 const { hasPermissions } = require('../middlewares/auth');
 const companyController = require('../controllers/company.controller')
 
@@ -47,7 +47,7 @@ router.get('/:id', hasPermissions(['view company']),companyController.retrivePro
  * @returns {object} 200 - Coompany object
  * @returns {Error}  default - Unexpected error
  */
-router.post('/', hasPermissions(['create company']) && userFormRequest('createUser'), companyController.createProfile);
+router.post('/', hasPermissions(['create company']) && companyFormRequest('createCompany'), companyController.createProfile);
 
 /**
  * Update an existing company by id 
@@ -60,7 +60,7 @@ router.post('/', hasPermissions(['create company']) && userFormRequest('createUs
  * @returns {Company.model} 200 - User object
  * @returns {Error}  default - Unexpected error
  */
-router.patch('/:id', hasPermissions(['update company']), companyController.updateProfile);
+router.patch('/:id', hasPermissions(['update company']) && companyFormRequest('updateCompany'), companyController.updateProfile);
 
 /**
  * Remove a new company  with id
@@ -117,7 +117,7 @@ router.get('/:id', hasPermissions(['view officer']),companyController.retriveOff
  * @returns {object} 200 - officer object
  * @returns {Error}  default - Unexpected error
  */
-router.post('/', hasPermissions(['create officer']) && userFormRequest('createUser'), companyController.createOfficer);
+router.post('/', hasPermissions(['create officer']) && companyFormRequest('createOfficer'), companyController.createOfficer);
 
 /**
  * Update an existing officer by id 
@@ -130,7 +130,7 @@ router.post('/', hasPermissions(['create officer']) && userFormRequest('createUs
  * @returns {OFFICER.model} 200 - officer object
  * @returns {Error}  default - Unexpected error
  */
-router.patch('officer/:id', hasPermissions(['update officer']), companyController.updateOfficer);
+router.patch('officer/:id', hasPermissions(['update officer']) && companyFormRequest('updateOfficer'), companyController.updateOfficer);
 
 /**
  * Remove a new officer  with id
@@ -186,7 +186,7 @@ router.get('slots/:id', hasPermissions(['view slot']),companyController.retriveS
  * @returns {object} 200 - slots object
  * @returns {Error}  default - Unexpected error
  */
-router.post('/slots', hasPermissions(['create slot']) && userFormRequest('createUser'), companyController.createSlot);
+router.post('/slots', hasPermissions(['create slot']) && companyFormRequest('createUser'), companyController.createSlot);
 
 /**
  * Update an existing slots by id 

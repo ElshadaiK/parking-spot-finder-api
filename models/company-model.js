@@ -15,8 +15,8 @@ const companySchema = new mongoose.Schema({
     slots: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Slots' }],
     rank: {type: Number, min: 0, max: 5},
     created_at: { type: Date, default: new Date() },
-    opens_at: {type: Date, required: true},
-    closes_at: {type: Date, required: true}
+    opens_at: {type: Number, required: true},
+    closes_at: {type: Number, required: true}
 })
 
 // methods
