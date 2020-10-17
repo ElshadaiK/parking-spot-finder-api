@@ -5,11 +5,8 @@ exports.authFormRequest = schemaName => async (req,res,next) => {
     let validationObjects = {
         loginUser: () => 
             Joi.object({
-                username: Joi.string()
-                    .alphanum()
-                    .min(3)
-                    .max(30)
-                    .required(),
+                email: Joi.string().required()
+                    .email(),
             
                 password: Joi.string().required()
                     .pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')),
@@ -27,8 +24,11 @@ exports.authFormRequest = schemaName => async (req,res,next) => {
             
                 repeat_password: Joi.ref('password'),
             
-                email: Joi.string()
-                    .email()
+                email: Joi.string().required()
+                    .email(),
+                
+                phone_no : Joi.number().required()
+                    .pattern(new RegExp('^(?:\+?\d{2}[ -]?\d{3}[ -]?\d{5}|\d{4})$'))
             }),
         forgetPassword: () => 
             Joi.object({
