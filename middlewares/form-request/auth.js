@@ -1,4 +1,5 @@
 const Joi = require('joi');
+const Joi_Num = Joi.extend(require('joi-phone-number'));
 
 
 exports.authFormRequest = schemaName => async (req,res,next) => {
@@ -27,8 +28,7 @@ exports.authFormRequest = schemaName => async (req,res,next) => {
                 email: Joi.string().required()
                     .email(),
                 
-                phone_no : Joi.number().required()
-                    .pattern(new RegExp('^(?:\+?\d{2}[ -]?\d{3}[ -]?\d{5}|\d{4})$'))
+                phone_no : Joi_Num.string().required().phoneNumber()
             }),
         forgetPassword: () => 
             Joi.object({
