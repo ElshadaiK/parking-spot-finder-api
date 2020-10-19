@@ -9,7 +9,7 @@ exports.login = async (req, res) => {
 
     try {
         const user = await userModel.findOne({
-            username: req.body.username
+            email: req.body.email
         }).populate({ path: 'roles', populate: {path: 'permissions'} });
 
         if(user && await user.verifyPassword(req.body.password)){
@@ -28,7 +28,7 @@ exports.login = async (req, res) => {
             })
         }
 
-       throw new Error("Username/password not found")
+       throw new Error("email/password not found")
 
     } catch (error) {
         
