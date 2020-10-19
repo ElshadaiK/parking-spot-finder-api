@@ -1,7 +1,5 @@
 const parkingLotService = require('../service/parkingLotService');
 
-const parkingLotService = require('../service/parkingLotService')
-
 
 exports.getParkingLotStacks = async (req, res, next) => {
 

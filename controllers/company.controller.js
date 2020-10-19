@@ -4,7 +4,7 @@ const companyModel = require('../models/company-model');
 
 const officerModel = require('../models/officer-model');
 
-const slotModel = require('../models/slot-model');
+const slotModel = require('../models/parking-models/slot-model');
 
 const roleModel = require('../models/role-model');
 

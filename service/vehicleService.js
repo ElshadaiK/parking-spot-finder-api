@@ -1,9 +1,8 @@
-const config = require('../config')
-const constant = require('../config/constant')
 const { Op } = require('sequelize')
-const debug = require('debug')(`${config.NAME}:service:vehicle`)
-const db = require('../model').getConnections()
 const util = require('../module/util')
+
+const parkingslotModel = require('../models/parking-models/slot-model');
+const parkingLotStackModel = require('../models/parking-models/parkingslot-stack-model');
 
 /**
  * @param {Number} [param.vehicleSizeId=0]
@@ -20,14 +19,14 @@ async function park (param) {
   } = param
 
   // find all stacks by slot_size_id
-  const parkingLotStackModels = await db.ParkingLotStack.findAll({
+  const parkingLot = await parkingLotStackModel.findAll({
     where: {
       slot_size_id: vehicleSizeId, // todo refactor this size id, now it the same
       data: { [Op.not]: '[]' }
     },
     order: [['parking_lot_rank', 'asc']]
   })
-  const parkingLotStacks = parkingLotStackModels.map(item => item.dataValues)
+  const parkingLotStacks = parkingLot.map(item => item.dataValues)
 
   // find available slot
   const availableParkingLotStack = util.getNearestAvailableParkingLotStack(parkingLotId, parkingLotStacks)
@@ -46,7 +45,7 @@ async function park (param) {
     const nearestSlotId = slotIds.shift()
 
     // update stack (caching)
-    await db.ParkingLotStack.update({
+    await parkingLotStackModel.update({
       data: JSON.stringify(slotIds) // remaining slot ids
     }, {
       where: { id: availableParkingLotStack.id },
@@ -85,7 +84,6 @@ async function park (param) {
  * @param {Number} param.ticketId
  */
 async function exit (param) {
-  debug(exit.name)
   const { ticketId } = param
 
   const ticketModel = await db.Ticket.findOne({
@@ -123,7 +121,7 @@ async function exit (param) {
       where: { id: ticket.slot_id },
       transaction
     })
-    const { dataValues: parkingLotStack } = await db.ParkingLotStack.findOne({
+    const { dataValues: parkingLotStack } = await parkingLotStackModel.findOne({
       where: {
         parking_lot_id: slot.parking_lot_id,
         slot_size_id: slot.slot_size_id
