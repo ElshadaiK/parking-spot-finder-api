@@ -1,0 +1,27 @@
+var router = require("express-promise-router")();
+
+const { hasPermissions } = require('../middlewares/auth');
+
+const parkingLotController = require('../controller/parkingLotController')
+const vehicleController = require('../controller/vehicleController')
+const ticketController = require('../controller/ticketController')
+
+const { validate } = require('../middlewares/index')
+
+// home
+router.get('/', (req, res) => res.json({
+    title: 'parking api',
+    version: '1.0.0',
+    description: 'description .....'
+  })
+);
+
+router.get('/parking_lot/status', hasPermissions(['view slot', 'view any slot']), parkingLotController.getParkingLotStacks);
+
+router.post('/vehicle/park', hasPermissions(['park car']) && validate('parkUser'), vehicleController.park);
+
+router.post('/vehicle/exit', hasPermissions(['unpark car']) && validate('unParkUser'), vehicleController.exit);
+
+router.get('/ticket', hasPermissions(['get ticket']) && validate('ticketUser'), ticketController.getTickets);
+
+module.exports = router;

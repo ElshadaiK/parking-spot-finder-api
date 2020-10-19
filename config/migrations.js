@@ -28,6 +28,12 @@ const permissions = [
     'view any slot',
     'view slot',
     'update slot',
+
+    'park car',
+    'unpark car',
+
+    'get ticket',
+    'give ticket'
 ]
 
 const roles = {
@@ -38,6 +44,11 @@ const roles = {
         'update user',
         
         'view slot',
+        'view any slot',
+        
+        'park car',
+        'unpark car',
+        'get ticket'
     ],
     company: [
         'create company user',
@@ -65,6 +76,8 @@ const roles = {
 
         'view officer',
         'update officer',
+
+        'give ticket'
     ]
 }
 

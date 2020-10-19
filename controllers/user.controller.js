@@ -49,7 +49,6 @@ exports.All = async (req, res) => {
 exports.get = async (req, res) => {
 
     try {
-        console.log(req.params);
         const user = await userModel.findById(req.params.id)
         res.json(user)
     } catch (error) {
