@@ -17,19 +17,19 @@ const TicketSchema = new mongoose.Schema({
     },
     park_at: {
       type: Date,
-      default: DataTypes.NOW
+      default: Date.NOW
     },
     exit_at: {
       type: Date,
-      default: DataTypes.NOW
+      default: Date.NOW
     },
     created_at: {
       type: Date,
-      default: DataTypes.NOW,
+      default: Date.NOW,
     },
     updated_at: {
       type: Date,
-      default: DataTypes.NOW,
+      default: Date.NOW,
     }
   });
 

@@ -1,4 +1,3 @@
-const { Op } = require('sequelize')
 const util = require('../module/util')
 
 const parkingslotModel = require('../models/parking-models/slot-model');

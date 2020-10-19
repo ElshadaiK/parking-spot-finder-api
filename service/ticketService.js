@@ -1,6 +1,4 @@
-const config = require('../config')
-const debug = require('debug')(`${config.NAME}:service:ticket`)
-const db = require('../model').getConnections()
+const ticketModel = require('../models/parking-models/ticket-model');
 
 /**
  * @param {Number} param.vehicleSizeId
@@ -9,7 +7,7 @@ const db = require('../model').getConnections()
 async function getTickets (param) {
   debug(getTickets.name)
   const { vehicleSizeId } = param
-  const ticketModels = await db.Ticket.findAll({
+  const ticketModels = await ticketModel.findAll({
     where: {
       vehicle_size_id: vehicleSizeId
     }

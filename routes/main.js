@@ -2,9 +2,9 @@ var router = require("express-promise-router")();
 
 const { hasPermissions } = require('../middlewares/auth');
 
-const parkingLotController = require('../controller/parkingLotController')
-const vehicleController = require('../controller/vehicleController')
-const ticketController = require('../controller/ticketController')
+const parkingLotController = require('../controllers/parkinglot.controller')
+const vehicleController = require('../controllers/vehicle.controller')
+const ticketController = require('../controllers/ticket.controller')
 
 const { validate } = require('../middlewares/index')
 

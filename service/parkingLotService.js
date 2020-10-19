@@ -1,6 +1,5 @@
-const constant = require('../config/constant')
 const parkingslotModel = require('../models/parking-models/slot-model');
-const parkingLotStackModel = require('../models/parking-models/parkingslot-stack-model')
+const parkingLotStackModel = require('../models/parking-models/parkingslot-stack-model');
 
 /**
  * @param {String} param.name

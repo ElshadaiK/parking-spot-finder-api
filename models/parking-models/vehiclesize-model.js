@@ -6,11 +6,11 @@ const VehicleSizeSchema = new mongoose.Schema({
       },
       created_at: {
         type: Date,
-        default: DataTypes.NOW,
+        default: Date.NOW,
       },
       updated_at: {
         type: Date,
-        default: DataTypes.NOW,
+        default: Date.NOW,
       }
   });
 
