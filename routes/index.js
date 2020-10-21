@@ -8,7 +8,7 @@ var router = express.Router();
  * @route GET /
  * @group index - Validates and gives back API service status
  * @returns {object} 200 - {
- *  title: 'Express boilerplate',
+ *  title: 'Parking Spot finder',
  *  version: '1.0.0',
  *   description: 'description .....'
  * }
@@ -16,7 +16,7 @@ var router = express.Router();
  */
 router.get('/', async function(req, res, next) {
   return res.json({
-    title: 'Express boilerplate',
+    title: 'Parking Spot finder',
     version: '1.0.0',
     description: 'description .....'
   })

@@ -14,10 +14,11 @@ exports.authFormRequest = schemaName => async (req,res,next) => {
             }),
         createUser: () => 
             Joi.object({
-                username: Joi.string()
+                name: Joi.string()
                     .alphanum()
                     .min(3)
                     .max(30)
+                    .pattern(new RegExp('^[a-zA-Z]{4,}(?: [a-zA-Z]+){0,2}$'))
                     .required(),
             
                 password: Joi.string().required()
@@ -28,7 +29,8 @@ exports.authFormRequest = schemaName => async (req,res,next) => {
                 email: Joi.string().required()
                     .email(),
                 
-                phone_no : Joi_Num.string().required().phoneNumber()
+                phone_no : Joi_Num.string().phoneNumber().required(),
+                plate_number : Joi.number().min(5).max(6).required()
             }),
         forgetPassword: () => 
             Joi.object({

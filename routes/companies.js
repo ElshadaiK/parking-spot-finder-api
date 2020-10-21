@@ -6,9 +6,13 @@ const companyController = require('../controllers/company.controller')
 
 /**
  * @typedef COMPANY
- * @property {string} name.required - A Unique name
- * @property {string} email.required - A Unique email name
- * @property {string} password.required - A strong password
+ * @property {string} name.required - A Unique company name
+ * @property {email} email.required - A Unique email name
+ * @property {string} password.required - A strong password length of 3-30 consisting lowercase, uppercase, and numbers
+ * @property {number} charge.required - Charge of parking per hour
+ * @property {number} floors - Parking floors available
+ * @property {number} slots.required - Available slots per floor
+ * @property {number} rank.required - Rank of parking company, from 0-5
  */
 /**
  * Returns ALL companies

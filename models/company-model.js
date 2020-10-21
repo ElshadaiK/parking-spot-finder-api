@@ -4,7 +4,7 @@ const mongoosePaginate = require('mongoose-paginate-v2');
 const bcrypt = require('bcrypt')
 
 const companySchema = new mongoose.Schema({
-    name: { type: String, default: '' },
+    name: { type: String, required: true},
     email: { type: String, unique: true, trim: true, lowercase: true, required: true},
     password: { type: String, required: true, minlength: 8, maxlength: 128},
     password_changed_at: { type: Date },
@@ -15,7 +15,7 @@ const companySchema = new mongoose.Schema({
     charge: {type: Number, required: true},
     floor: {type: Number, default: 1},
     slots: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Slots' }],
-    rank: {type: Number, min: 0, max: 5},
+    rank: {type: Number, min: 0, max: 5, required: true},
     created_at: { type: Date, default: new Date() },
     opens_at: {type: Number, required: true},
     closes_at: {type: Number, required: true}

@@ -6,9 +6,11 @@ const userController = require('../controllers/user.controller')
 
 /**
  * @typedef USER
- * @property {string} username.required - A Unique user name
- * @property {string} email.required - A Unique email name
- * @property {string} password.required - A strong password
+ * @property {string} full_name.required - User's full name
+ * @property {email} email.required - Unique email address
+ * @property {string} password.required - A strong password length of 3-30 consisting lowercase, uppercase, and numbers
+ * @property {number} phone_no.required - User's phone number
+ * @property {number} plate_no.required - User's plate number
  */
 /**
  * Returns ALL Users
