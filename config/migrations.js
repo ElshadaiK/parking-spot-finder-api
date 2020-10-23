@@ -83,10 +83,13 @@ const roles = {
 
 const users = [
     {
-        username: 'admin',
+        name: 'admin',
         email: 'super@admin.com',
         password: 'superuser',
-        roles: ['admin']
+        roles: ['admin'],
+        plate_number : 00000,
+        phone_no : +251900000000
+
     }
 ]
 
