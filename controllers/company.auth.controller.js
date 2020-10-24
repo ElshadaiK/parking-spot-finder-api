@@ -3,6 +3,7 @@ const Joi = require('joi');
 
 const { jwt_key } = require('../config/vars')
 const companyModel = require('../models/company-model')
+const roleModel = require('../models/role-model');
 
 
 exports.login = async (req, res) => {
@@ -40,7 +41,12 @@ exports.login = async (req, res) => {
 exports.signup = async (req, res) => {
 
     try {
-        const company = await companyModel.create(req.body)
+        let data = await roleModel.find({
+            name: {
+                $in: 'company' // [1,2,3]
+            }
+        })
+        const company = await companyModel.create({...req.body, roles: data})
         res.json(company)
     } catch (error) {
         res.status(400).json({

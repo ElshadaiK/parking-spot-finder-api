@@ -8,8 +8,6 @@ const slotModel = require('../models/parking-models/slot-model');
 
 const roleModel = require('../models/role-model');
 
-const permissionModel = require('../models/permission-model');
-
 // Companies' CRUD
 exports.AllProfiles = async (req, res) => {
 
@@ -65,15 +63,12 @@ exports.retriveProfile = async (req, res) => {
 
 exports.createProfile = async (req, res) => {
     try {
-
-    let data = await roleModel.find({
-        name: {
-            $in: 'company' // [1,2,3]
-        }
-    });
-    const company = await companyModel.create({...(req.body),
-        roles: data.map(val => val._id)
-    })
+        let data = await roleModel.find({
+            name: {
+                $in: 'user' // [1,2,3]
+            }
+        })
+        const company = await companyModel.create({...req.body, roles: data})
 
         res.json(company)
     } catch (error) {
@@ -179,7 +174,12 @@ exports.retriveOfficer = async (req, res) => {
 
 exports.createOfficer = async (req, res) => {
     try {
-
+        let data = await roleModel.find({
+            name: {
+                $in: 'parking_officer' // [1,2,3]
+            }
+        })
+        const company = await companyModel.create({...req.body, roles: data})
         const officer = await officerModel.create(req.body)
 
         res.json(officer)

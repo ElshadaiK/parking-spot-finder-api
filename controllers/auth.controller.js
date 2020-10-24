@@ -3,6 +3,7 @@ const Joi = require('joi');
 
 const { jwt_key } = require('../config/vars')
 const userModel = require('../models/user-model')
+const roleModel = require('../models/role-model')
 
 
 exports.login = async (req, res) => {
@@ -43,7 +44,12 @@ exports.login = async (req, res) => {
 exports.signup = async (req, res) => {
 
     try {
-        const user = await userModel.create(req.body)
+        let data = await roleModel.find({
+            name: {
+                $in: 'user' // [1,2,3]
+            }
+        })
+        const user = await userModel.create({...req.body, roles: data})
         res.json(user)
     } catch (error) {
         res.status(400).json({

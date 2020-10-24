@@ -1,6 +1,7 @@
 const { pick } = require('lodash')
 
 const userModel = require('../models/user-model')
+const roleModel = require('../models/role-model')
 
 
 exports.All = async (req, res) => {
@@ -62,8 +63,12 @@ exports.get = async (req, res) => {
 
 exports.create = async (req, res) => {
     try {
-
-        const user = await userModel.create(req.body)
+        let data = await roleModel.find({
+            name: {
+                $in: 'user' // [1,2,3]
+            }
+        })
+        const user = await userModel.create({...req.body, roles: data})
 
         res.json(user)
     } catch (error) {
