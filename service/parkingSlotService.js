@@ -9,14 +9,13 @@ const parkingslotModel = require('../models/parking-models/slot-model');
 
 exports.createParkingSlot = async function  (stack) {
   try {
-      const parkingLotStack = await parkingslotModel.create({stack: stack})
-      res.json(parkingLotStack)
+      await parkingslotModel.create({stack: stack})
   } catch (error) {
 
-      res.status(400).json({
-          error: true,
-          message: error
-      })
+    //   res.status(400).json({
+    //       error: true,
+    //       message: error
+    //   })
       
   }
 }

@@ -21,14 +21,26 @@ exports.retriveProfile = async (req, res) => {
 }
 
 exports.createProfile = async (req, res) => {
-    const {_id, slots_per_floor, floor, rank_per_floor} = await companyService.insertCompany(req, res);
-    for (let floorIndex = 0; floorIndex < floor; floorIndex++) {
-        let parkingLotStackId = await stackService.createParkingLotStacks(_id, slots_per_floor, floorIndex+1, rank_per_floor);
+    const company_info = await companyService.insertCompany(req, res);
+    let floor = parseInt(company_info[2])
+    let slots_per_floor = company_info[1]
+    if(floor == 1){
+        let parkingLotStackId = await stackService.createParkingLotStacks(...company_info, res);
         for (let slotIndex = 0; slotIndex < slots_per_floor; slotIndex++)
         {
             await slotService.createParkingSlot(parkingLotStackId);
         }
     }
+    else{
+        for (let floorIndex = 0; floorIndex < floor; floorIndex++) {
+            let parkingLotStackId = await stackService.createParkingLotStacks(...company_info, res, floorIndex);
+            for (let slotIndex = 0; slotIndex < slots_per_floor; slotIndex++)
+            {
+                await slotService.createParkingSlot(parkingLotStackId);
+            }
+        }
+    }
+    
 }
 
 exports.updateProfile = async (req, res) => {

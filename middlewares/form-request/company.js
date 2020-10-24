@@ -22,7 +22,8 @@ exports.companyFormRequest = schemaName => async (req,res,next) => {
                 opens_at: Joi.number(),
                 closes_at: Joi.number(),
                 slots_per_floor: Joi.number(),
-                rank_per_floor: Joi.number().min(0).max(5)
+                rank_per_floor: Joi.number().min(0).max(5),
+                floor: Joi.number().min(1).max(10)
             }),
         updateCompany: () => 
             Joi.object({
