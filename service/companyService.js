@@ -53,7 +53,7 @@ exports.insertCompany = async function (req, res){
     try {
         let data = await roleModel.find({
             name: {
-                $in: 'user' // [1,2,3]
+                $in: 'company' // [1,2,3]
             }
         })
         const company = await companyModel.create({...req.body, roles: data})
