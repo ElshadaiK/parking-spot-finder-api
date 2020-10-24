@@ -59,6 +59,8 @@ exports.insertCompany = async function (req, res){
         const company = await companyModel.create({...req.body, roles: data})
 
         res.json(company)
+
+        return (company._id, company.slots_per_floor, company.floor, company.rank_per_floor)
     } catch (error) {
         res.status(400).json({
             error: true,

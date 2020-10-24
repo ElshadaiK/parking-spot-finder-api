@@ -7,10 +7,11 @@ const parkingLotStackModel = require('../models/parking-models/parkingslot-stack
  * @returns {ParkingLot}
  */
 
-exports.createParkingLotStacks = async function  (req, res) {
+exports.createParkingLotStacks = async function  (id, slots_per_floor, floor, rank_per_floor) {
   try {
-      const parkingLotStack = await parkingLotStackModel.create(req.body)
+      const parkingLotStack = await parkingLotStackModel.create({company: id, parking_slots: slots_per_floor, floor: floor, parking_lot_rank: rank_per_floor})
       res.json(parkingLotStack)
+      return (parkingLotStack._id)
   } catch (error) {
 
       res.status(400).json({

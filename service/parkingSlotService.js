@@ -7,9 +7,9 @@ const parkingslotModel = require('../models/parking-models/slot-model');
  * @returns {ParkingLot}
  */
 
-exports.createParkingSlot = async function  (req, res) {
+exports.createParkingSlot = async function  (stack) {
   try {
-      const parkingLotStack = await parkingslotModel.create(req.body)
+      const parkingLotStack = await parkingslotModel.create({stack: stack})
       res.json(parkingLotStack)
   } catch (error) {
 
