@@ -1,10 +1,7 @@
 
-const slotModel = require('../models/parking-models/slot-model');
-
 const companyService = require('../service/companyService');
 const officerService = require('../service/officerServices');
 const stackService = require('../service/parkingLotStackService');
-const slotService = require('../service/parkingSlotService');
 
 
 // Companies' CRUD
@@ -23,13 +20,9 @@ exports.retriveProfile = async (req, res) => {
 exports.createProfile = async (req, res) => {
     const company_info = await companyService.insertCompany(req, res);
     let floor = parseInt(company_info[2])
-    let slots_per_floor = company_info[1]
     for (let floorIndex = 0; floorIndex < floor; floorIndex++) {
-            let parkingLotStackId = await stackService.createParkingLotStacks(...company_info, res, floorIndex);
-            // for (let slotIndex = 0; slotIndex < slots_per_floor; slotIndex++)
-            // {
-            //     await slotService.createParkingSlot(parkingLotStackId);
-            // }
+            await stackService.createParkingLotStacks(...company_info, res, floorIndex);
+            
         }
     
 }

@@ -17,19 +17,16 @@ exports.createParkingLotStacks = async function  (id, slots_per_floor, floors, r
             })
             parkingSlots.push(slot)
         } 
-      const parkingLotStack = await parkingLotStackModel.create({company: id, parking_slots: 
+      await parkingLotStackModel.create({company: id, parking_slots: 
         slots_per_floor, 
         floor: floor_index, 
         parking_lot_rank: rank_per_floor, 
         slots: parkingSlots})
-      res.json(parkingLotStack)
-      return parkingLotStack._id
+
+    //   res.json(parkingLotStack)
   } catch (error) {
 
-    //   res.status(400).json({
-    //       error: true,
-    //       message: error
-    //   })
+    throw new Error("Couldn't create parking lot stack")
 
   }
 }

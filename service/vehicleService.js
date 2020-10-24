@@ -1,6 +1,5 @@
 const util = require('../module/util')
 
-const parkingslotModel = require('../models/parking-models/slot-model');
 const parkingLotStackModel = require('../models/parking-models/parkingslot-stack-model');
 
 /**
