@@ -7,6 +7,10 @@ const SlotSchema = new mongoose.Schema({
         type: Boolean,
         default: true
     },
+    occupied_by: {
+        type: String,
+        default: ""
+    }
 },{timestamps: {createdAt: 'created_at', modifiedAt: 'modified_at'}
 });
 
