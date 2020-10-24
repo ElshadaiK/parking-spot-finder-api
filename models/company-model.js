@@ -10,16 +10,19 @@ const companySchema = new mongoose.Schema({
     password_changed_at: { type: Date },
     active: { type: Boolean, default: true },
     push_token: { type: String, default: '' },
+
     roles: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Roles' }],
     permissions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Permissions' }],
+
     charge: {type: Number, required: true},
     floor: {type: Number, default: 1},
-    slots: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Slots' }],
-    rank: {type: Number, min: 0, max: 5, required: true},
-    created_at: { type: Date, default: new Date() },
+    slots_per_floor: {type: Number, required: true},
+    rank_per_floor: {type: Number, min: 0, max: 5, required: true},
+
     opens_at: {type: Number, required: true},
     closes_at: {type: Number, required: true}
-})
+},{timestamps: {createdAt: 'created_at', modifiedAt: 'modified_at'}
+});
 
 // methods
 

@@ -1,28 +1,14 @@
 const mongoose = require('mongoose');
 
 const SlotSchema = new mongoose.Schema({
-    company: { type: mongoose.Schema.Types.ObjectId, ref: 'Company' },
+    stack: [{ type: mongoose.Schema.Types.ObjectId, ref: 'ParkingLotStack' }],
     
-    rank: {
-        type: Number,
-        min: 0
+    slot_status_open: {
+        type: Boolean,
+        default: true
     },
-
-    parking_lot_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'ParkingLot'
-    },
-
-    slot_size_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'SlotSize'
-    },
-    
-    slot_status_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'SlotStatus'
-    },
-
+},{timestamps: {createdAt: 'created_at', modifiedAt: 'modified_at'}
 });
+
 
 module.exports = mongoose.model('Slots', SlotSchema);

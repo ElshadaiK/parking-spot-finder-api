@@ -10,15 +10,17 @@ const userSchema = new mongoose.Schema({
     password_changed_at: { type: Date },
     phone_no : {type: Number, required: true},
     plate_number : { type : Number, required: true},
+
     active: { type: Boolean, default: true },
     push_token: { type: String, default: '' },
+
     roles: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Roles' }],
     permissions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Permissions' }],
-    archived: { type: Boolean, default: false },
+
     last_login: { type: Date },
-    created_at: { type: Date, default: new Date() },
-    updated_at: { type: Date, default: new Date() }
-})
+
+  },{timestamps: {createdAt: 'created_at', modifiedAt: 'modified_at'}
+});
 
 // methods
 

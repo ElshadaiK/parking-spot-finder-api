@@ -4,14 +4,7 @@ const TicketStatusSchema = new mongoose.Schema({
       name: {
         type: String
       },
-      created_at: {
-        type: Date,
-        default: Date.NOW,
-      },
-      updated_at: {
-        type: Date,
-        default: Date.NOW,
-      }
-  })
+    },{timestamps: {createdAt: 'created_at', modifiedAt: 'modified_at'}
+  });
 
   module.exports = mongoose.model('TicketStatus', TicketStatusSchema);

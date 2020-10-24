@@ -19,8 +19,7 @@ const OfficerSchema = new mongoose.Schema({
     works_from: {type: Number, required: true},
     works_to: {type: Number, required: true},
 
-    created_at: { type: Date, default: new Date() },
-    updated_at: { type: Date, default: new Date() }
+  },{timestamps: {createdAt: 'created_at', modifiedAt: 'modified_at'}
 });
 
 // methods

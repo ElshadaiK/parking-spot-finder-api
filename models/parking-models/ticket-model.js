@@ -4,9 +4,6 @@ const TicketSchema = new mongoose.Schema({
     plate_number: {
       type: String
     },
-    vehicle_size_id: {
-      type: String // todo small car can park in medium slot
-    },
     slot_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref : 'Slot'
@@ -23,15 +20,8 @@ const TicketSchema = new mongoose.Schema({
       type: Date,
       default: Date.NOW
     },
-    created_at: {
-      type: Date,
-      default: Date.NOW,
-    },
-    updated_at: {
-      type: Date,
-      default: Date.NOW,
-    }
-  });
+  },{timestamps: {createdAt: 'created_at', modifiedAt: 'modified_at'}
+});
 
 module.exports = mongoose.model('Ticket', TicketSchema);
 
