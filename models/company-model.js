@@ -30,8 +30,15 @@ companySchema.pre('save', function preSave(next) {
     let model = this
 
     model.hashPasswd(model.password, (err, hash) => {
+      if(err){
+        return ({error: "No password field provided", status: 400});
+      }
+      else{
+        
         model.password = hash
         next()
+      }
+
     })
 })
 

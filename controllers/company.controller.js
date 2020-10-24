@@ -1,232 +1,62 @@
-const { pick } = require('lodash')
 
-const companyModel = require('../models/company-model');
-
-const officerModel = require('../models/officer-model');
 
 const slotModel = require('../models/parking-models/slot-model');
 
-const roleModel = require('../models/role-model');
+const companyService = require('../service/companyService');
+const officerService = require('../service/officerServices');
 
 // Companies' CRUD
 exports.AllProfiles = async (req, res) => {
-
-    try {
-
-        let sort = {}
-        if(req.query.sort) {
-            sort[req.query.sort] = req.query.asc ? 1 :-1 
-        }
-
-        let query = {}
-
-        if(req.query.filter) {
-            let filter = JSON.parse(req.query.filter);
-            query = pick(filter, ['username', 'email', 'active']) 
-            
-        }
-        
-        const options = {
-            sort: Object.values(sort).length > 0 ? sort: {
-                'created_at': -1
-            },
-            page: req.query.page || 1,
-            limit: req.query.limit || 10,
-            // populate: { path: 'roles', populate: {path: 'permissions'}}
-        }
-        const company = await companyModel.paginate(query,options)
-
-        res.json(company)
-
-    } catch (error) {
-        res.status(400).json({
-            error: true,
-            message: error.message
-        })
-    }
-    
+    await companyService.findAllCompanies(req, res);
 }
 
 exports.retriveProfile = async (req, res) => {
-
-    try {
-        const company = await companyModel.findById(req.params.id)
-        res.json(company)
-    } catch (error) {
-        res.status(404).json({
-            error: true,
-            message: error
-        })
+    if(req.param.name){
+        await companyService.findCompanyByName(req, res);
     }
-
+    else if(req.param.id)
+        await companyService.findCompanyById(req, res);
 }
 
 exports.createProfile = async (req, res) => {
-    try {
-        let data = await roleModel.find({
-            name: {
-                $in: 'user' // [1,2,3]
-            }
-        })
-        const company = await companyModel.create({...req.body, roles: data})
-
-        res.json(company)
-    } catch (error) {
-        res.status(400).json({
-            error: true,
-            message: error
-        })
-    }
-
+    await companyService.insertCompany(req, res);
 }
 
 exports.updateProfile = async (req, res) => {
-
-    try {
-        let company = await companyModel.findById(req.params.id)
-        if(company) {
-            company = await companyModel.updateOne({_id: company._id}, req.body)
-            return res.json(company)
-        }
-
-        throw new Error('Company dosen\'t exist')
-       
-
-        
-    } catch (error) {
-        res.status(400).json({
-            error: true,
-            message: error
-        })
-    }
+    await companyService.updateACompany(req, res);
 }
 
 exports.removeProfile = async (req, res) => {
-    try {
-        let company = await companyModel.findById(req.params.id)
-        if(company) {
-            await companyModel.remove({
-                _id: company._id
-            })
-            return res.json(company)
-        }
-        throw new Error('Company doesn\'t exist')
-
-    } catch (error) {
-        
-    }
+    await companyService.deleteACompany(req, res);
 }
 
 // Officers' CRUD
 
 exports.AllOfficers = async (req, res) => {
-
-    try {
-
-        let sort = {}
-        if(req.query.sort) {
-            sort[req.query.sort] = req.query.asc ? 1 :-1 
-        }
-
-        let query = {}
-
-        if(req.query.filter) {
-            let filter = JSON.parse(req.query.filter);
-            query = pick(filter, ['username', 'email', 'active']) 
-            
-        }
-        
-        const options = {
-            sort: Object.values(sort).length > 0 ? sort: {
-                'created_at': -1
-            },
-            page: req.query.page || 1,
-            limit: req.query.limit || 10,
-            // populate: { path: 'roles', populate: {path: 'permissions'}}
-        }
-        const officer = await officerModel.paginate(query,options)
-
-        res.json(officer)
-
-    } catch (error) {
-        res.status(400).json({
-            error: true,
-            message: error.message
-        })
-    }
+    await officerService.findAllOfficers(req, res);
     
 }
 
 exports.retriveOfficer = async (req, res) => {
-
-    try {
-        console.log(req.params);
-        const officer = await officerModel.findById(req.params.id)
-        res.json(officer)
-    } catch (error) {
-        res.status(404).json({
-            error: true,
-            message: error
-        })
+    if(req.param.name){
+        await officerService.findOfficerByName(req, res);
     }
+    else if(req.param.id)
+        await officerService.findOfficerById(req, res);
 
 }
 
 exports.createOfficer = async (req, res) => {
-    try {
-        let data = await roleModel.find({
-            name: {
-                $in: 'parking_officer' // [1,2,3]
-            }
-        })
-        const company = await companyModel.create({...req.body, roles: data})
-        const officer = await officerModel.create(req.body)
-
-        res.json(officer)
-    } catch (error) {
-        res.status(400).json({
-            error: true,
-            message: error
-        })
-    }
+    await officerService.insertOfficer(req, res)
 
 }
 
 exports.updateOfficer = async (req, res) => {
-
-    try {
-        let officer = await officerModel.findById(req.params.id)
-        if(officer) {
-            officer = await officerModel.updateOne({_id: officer._id}, req.body)
-            return res.json(officer)
-        }
-
-        throw new Error('Officer dosen\'t exist')
-       
-
-        
-    } catch (error) {
-        res.status(400).json({
-            error: true,
-            message: error
-        })
-    }
+    await officerService.updateOfficer(req, res)
 }
 
 exports.removeOfficer = async (req, res) => {
-    try {
-        let officer = await officerModel.findById(req.params.id)
-        if(officer) {
-            await officerModel.remove({
-                _id: officer._id
-            })
-            return res.json(officer)
-        }
-        throw new Error('Officer doesn\'t exist')
-
-    } catch (error) {
-        
-    }
+    await officerService.deleteOfficer(req, res)
 }
 
 // Slots' CRUD
