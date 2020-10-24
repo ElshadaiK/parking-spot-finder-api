@@ -1,5 +1,4 @@
 
-
 const slotModel = require('../models/parking-models/slot-model');
 
 const companyService = require('../service/companyService');
@@ -74,11 +73,6 @@ exports.AllSlots = async (req, res) => {
 
         if(req.query.filter) {
             let filter = JSON.parse(req.query.filter);
-            // Object.keys(filter).forEach(index => {
-            //     if(typeof filter[index] !== 'string' || typeof filter[index] !== 'number') {
-            //         delete filter[index]
-            //     }
-            // }) 
             query = pick(filter, ['username', 'email', 'active']) 
             
         }
@@ -122,9 +116,9 @@ exports.retriveSlot = async (req, res) => {
 exports.createSlot = async (req, res) => {
     try {
 
-        const user = await slotModel.create(req.body)
+        const slot = await slotModel.create(req.body)
 
-        res.json(user)
+        res.json(slot)
     } catch (error) {
         res.status(400).json({
             error: true,
