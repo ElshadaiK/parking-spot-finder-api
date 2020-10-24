@@ -19,6 +19,17 @@ const companySchema = new mongoose.Schema({
     slots_per_floor: {type: Number, required: true},
     rank_per_floor: {type: Number, min: 0, max: 5, required: true},
 
+    location: {
+      type: {
+        type: String, 
+        enum: "Point", default: "Point",
+      },
+      coordinates: {
+        type: [Number],
+        required: true
+      }, 
+    },
+
     opens_at: {type: Number, required: true},
     closes_at: {type: Number, required: true}
 },{timestamps: {createdAt: 'created_at', modifiedAt: 'modified_at'}

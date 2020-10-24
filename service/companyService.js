@@ -55,8 +55,14 @@ exports.insertCompany = async function (req, res){
             name: {
                 $in: 'company' // [1,2,3]
             }
+        });
+        let companyCoordinate = req.body.coordinate
+        const company = await companyModel.create({...req.body, roles: data,
+            location : {
+                type: "Point",
+                coordinates: companyCoordinate
+              }
         })
-        const company = await companyModel.create({...req.body, roles: data})
         const company_info = [company._id, company.slots_per_floor, company.floor, company.rank_per_floor]
         res.json(company)
         return company_info
