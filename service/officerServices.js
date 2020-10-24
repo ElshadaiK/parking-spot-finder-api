@@ -108,7 +108,7 @@ exports.deleteOfficer = async function(req, res){
         })
     }
 }
-exports.findOfficerByName = function(req, res){
+exports.findOfficerByName = async function(req, res){
     try {
         const officer = await officerModel.find({fullName: {$regex:`^${req.params.name}`, $options:'i'}})
         res.json(officer)

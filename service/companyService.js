@@ -105,7 +105,7 @@ exports.deleteACompany = async function(req, res){
         })
     }
 }
-exports.findCompanyByName = function(req, res){
+exports.findCompanyByName = async function(req, res){
     try {
         const company = await companyModel.find({fullName: {$regex:`^${req.params.name}`, $options:'i'}})
         res.json(company)
