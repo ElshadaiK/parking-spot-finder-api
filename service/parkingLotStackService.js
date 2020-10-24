@@ -9,7 +9,19 @@ const parkingLotStackModel = require('../models/parking-models/parkingslot-stack
 
 exports.createParkingLotStacks = async function  (id, slots_per_floor, floors, rank_per_floor, res, floor_index) {
   try {
-      const parkingLotStack = await parkingLotStackModel.create({company: id, parking_slots: slots_per_floor, floor: floor_index, parking_lot_rank: rank_per_floor})
+    const parkingSlots  = []
+        for (let i = 0; i < 5; i++) {
+            let slot = JSON.stringify({
+                open_status : true,
+                occupied_by : ""
+            })
+            parkingSlots.push(slot)
+        } 
+      const parkingLotStack = await parkingLotStackModel.create({company: id, parking_slots: 
+        slots_per_floor, 
+        floor: floor_index, 
+        parking_lot_rank: rank_per_floor, 
+        slots: parkingSlots})
       res.json(parkingLotStack)
       return parkingLotStack._id
   } catch (error) {

@@ -1,3 +1,4 @@
+const { json } = require('express');
 const mongoose = require('mongoose');
 
 const ParkingLotStack = new mongoose.Schema({
@@ -13,6 +14,8 @@ const ParkingLotStack = new mongoose.Schema({
   full_status : {type: Boolean, default: false}, 
 
   data: {type: String},
+
+  slots: [{}]
 
 },{timestamps: {createdAt: 'created_at', modifiedAt: 'modified_at'}
 });
