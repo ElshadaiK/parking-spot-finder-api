@@ -2,15 +2,16 @@ const util = require('../module/util')
 
 const parkingLotStackModel = require('../models/parking-models/parkingslot-stack-model');
 const ticketModel = require('../models/parking-models/ticket-model');
+const parkingslotStackModel = require('../models/parking-models/parkingslot-stack-model');
 
 /**
  * @param {Array} [param.location='']
- * @returns {Ticket}
+ * @returns {Stacks}
  */
 
 exports.getParkings = async function (param){
   const {
-    latitude, longitude, res
+    latitude, longitude
   } = param
   
     let theNearest = await parkingLotStackModel.find(
@@ -25,42 +26,51 @@ exports.getParkings = async function (param){
         }
       }
     ).exec()
-    return theNearest
-    // theNearest.find((error, results) => {
-    //   if (error) return error
-    //   let stacks = JSON.stringify(results)
-    //    console.log(stacks);
-    //   // return stacks
-    //   });
- 
+    return theNearest 
 }
 /**
- * @param {String} [param.plate_number='']
- * @param {Number} [param.parking_Stack_Id=0]
+ * @param {String} [param.plate_number]
+ * @param {Number} [param.parking_Stack_Id]
+ * @param {Number} [param.parking_Lot_Id]
  * @returns {Ticket}
  */
 exports.park = async function (param) {
   const {
-    plateNumber = '',
-    parkingLotId = 0
+    plate_number,
+    the_stack,
+    parkingSlotId
+  } = param
+  const ticket = JSON.parse(the_stack.slots[parkingSlotId])
+  ticket.open_status = false;
+  ticket.occupied_by = plate_number;
+  ticket.start_time = Date.now();
+  const chosen_slot = JSON.stringify(ticket)
+  let all_slots = the_stack.slots.slice(0, parkingSlotId)
+  all_slots.push(chosen_slot)
+  all_slots.push(the_stack.slots.slice(parkingSlotId, parkingSlotId))
+  console.log(all_slots)
+  const updated = await parkingslotStackModel.findByIdAndUpdate({_id: the_stack._id}, {slots : JSON.stringify(all_slots)})
+    return chosen_slot
+  } 
+  /**
+ * @param {Number} [param.parking_Stack_Id]
+ * @returns {Parking Slots}
+ */
+exports.getAvailable = async function (param) {
+  const {
+    parkingLotId
   } = param
 
   const the_stack = await parkingLotStackModel.findById(parkingLotId);
-  
-    // create ticket
-    const ticketModel = await db.Ticket.create({
-      plate_number: plateNumber,
-      vehicle_size_id: vehicleSizeId,
-      slot_id: nearestSlotId,
-      ticket_status_id: constant.TICKET_STATUS.OPEN
-    }, {
-      transaction
-    })
+  const the_slots =  the_stack.slots;
+  let the_array =[]
+  the_slots.forEach(slot => {
+    let slotToCheck = JSON.parse(slot);
+    if(slotToCheck.open_status) 
+      {the_array.push(slotToCheck)}
+  });
+  return the_array
 
-    // commit
-    await transaction.commit()
-
-    return ticketModel.dataValues
   } 
 
 /**
@@ -133,17 +143,10 @@ exports.exit = async function  (param) {
   }
 }
 
-exports.isStackFull = async function (param){
-  try{
-    const {parkingLotId} = param
-    const the_stack = await parkingLotStackModel.findById(parkingLotId);
-    if(the_stack){
-      return the_stack.full_status
-    }
-
-    throw new Error('Stack dosen\'t exist')   
-  }
-  catch (error) {
-    return error
-  }  
+exports.isStackFull = async function (the_stack){
+  return the_stack.full_status 
+}
+exports.isSlotEmpty = async function (parkingSlotId, the_stack){
+    const the_slot = JSON.parse((the_stack.slots)[parkingSlotId])
+    return the_slot.open_status
 }

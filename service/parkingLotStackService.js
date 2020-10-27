@@ -10,10 +10,12 @@ const parkingLotStackModel = require('../models/parking-models/parkingslot-stack
 exports.createParkingLotStacks = async function  (id, slots_per_floor, floors, rank_per_floor, Clocation, res, floor_index) {
   try {
     const parkingSlots  = []
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < slots_per_floor; i++) {
             let slot = JSON.stringify({
                 open_status : true,
-                occupied_by : ""
+                occupied_by : "",
+                start_time: "",
+                index: i
             })
             parkingSlots.push(slot)
         } 
