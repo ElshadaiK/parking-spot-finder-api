@@ -1,85 +1,52 @@
 const util = require('../module/util')
 
 const parkingLotStackModel = require('../models/parking-models/parkingslot-stack-model');
+const ticketModel = require('../models/parking-models/ticket-model');
 
 /**
- * @param {Number} [param.vehicleSizeId=0]
- * @param {String} [param.plateNumber='']
- * @param {Number} [param.parkingLotId=0]
+ * @param {Array} [param.location='']
  * @returns {Ticket}
  */
 
-async function getParkings(param){
+exports.getParkings = async function (param){
   const {
-    location, rank
+    latitude, longitude, res
   } = param
-  try{
-    await parkingLotStackModel.createIndex({ "location" : "2dshere"})
-    const nearestParkingStacks = await parkingLotStackModel.find(
+  
+    let theNearest = await parkingLotStackModel.find(
       {
-        "location" : {
+        location : {
           $near: {
             $geometry: {
               type: "Point",
-              coordinates : location
+              coordinates : [latitude, longitude]
             },
           }
         }
       }
-    )
-    if(nearestParkingStacks == null){
-      throw new Error('no available parking stack')
-    }
-    else{
-      return nearestParkingStacks
-    }
-  }catch(err){
-    return err
-  }
+    ).exec()
+    return theNearest
+    // theNearest.find((error, results) => {
+    //   if (error) return error
+    //   let stacks = JSON.stringify(results)
+    //    console.log(stacks);
+    //   // return stacks
+    //   });
  
 }
-async function park (param) {
+/**
+ * @param {String} [param.plate_number='']
+ * @param {Number} [param.parking_Stack_Id=0]
+ * @returns {Ticket}
+ */
+exports.park = async function (param) {
   const {
     plateNumber = '',
     parkingLotId = 0
   } = param
 
-  // find all stacks 
-const parkingLotStacks = await parkingLotStackModel.findAll({}, null, {sort : '-createdAt'})
-
-
-  // find available slot
-  const availableParkingLotStack = util.getNearestAvailableParkingLotStack(parkingLotId, parkingLotStacks)
-  if (availableParkingLotStack === null) {
-    throw new Error('no available slot')
-  }
-
-  // if there has slot available
-  let transaction
-  try {
-    // get transaction
-    transaction = await db.sequelize.transaction()
-
-    // get the nearest slot id
-    const slotIds = JSON.parse(availableParkingLotStack.data)
-    const nearestSlotId = slotIds.shift()
-
-    // update stack (caching)
-    await parkingLotStackModel.update({
-      data: JSON.stringify(slotIds) // remaining slot ids
-    }, {
-      where: { id: availableParkingLotStack.id },
-      transaction
-    })
-
-    // update slot status
-    await db.Slot.update({
-      slot_status_id: constant.SLOT_STATUS.OCCUPIED
-    }, {
-      where: { id: nearestSlotId },
-      transaction
-    })
-
+  const the_stack = await parkingLotStackModel.findById(parkingLotId);
+  
     // create ticket
     const ticketModel = await db.Ticket.create({
       plate_number: plateNumber,
@@ -94,16 +61,12 @@ const parkingLotStacks = await parkingLotStackModel.findAll({}, null, {sort : '-
     await transaction.commit()
 
     return ticketModel.dataValues
-  } catch (err) {
-    // Rollback transaction only if the transaction object is defined
-    if (transaction) await transaction.rollback()
-  }
-}
+  } 
 
 /**
  * @param {Number} param.ticketId
  */
-async function exit (param) {
+exports.exit = async function  (param) {
   const { ticketId } = param
 
   const ticketModel = await db.Ticket.findOne({
@@ -170,7 +133,7 @@ async function exit (param) {
   }
 }
 
-async function isStackFull(param){
+exports.isStackFull = async function (param){
   try{
     const {parkingLotId} = param
     const the_stack = await parkingLotStackModel.findById(parkingLotId);
@@ -183,11 +146,4 @@ async function isStackFull(param){
   catch (error) {
     return error
   }  
-}
-
-module.exports = {
-  getParkings,
-  isStackFull,
-  park,
-  exit
 }

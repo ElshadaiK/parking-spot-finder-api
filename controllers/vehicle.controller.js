@@ -2,14 +2,14 @@ const vehicleService = require('../service/vehicleService')
 
 exports.getParkings = async (req, res, next) => {
   const { user } = req
-  const { location, rank } = req.body
+  const { latitude, longitude } = req.body
 
   try {
     if(user){
-      const parkingLotsNearId = await vehicleService.getParkings({
-        location, rank
+      let nearestStacks = await vehicleService.getParkings({
+        latitude, longitude, res
       })
-      res.json(parkingLotsNearId);
+      res.json(nearestStacks);
       return next()
     }
     throw new Error('You have to login first') 

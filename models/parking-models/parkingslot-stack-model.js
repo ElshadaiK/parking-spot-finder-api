@@ -31,4 +31,6 @@ const ParkingLotStack = new mongoose.Schema({
 },{timestamps: {createdAt: 'created_at', modifiedAt: 'modified_at'}
 });
 
+ParkingLotStack.index({ location : "2dsphere" });
+
 module.exports = mongoose.model('ParkingLotStack', ParkingLotStack);
