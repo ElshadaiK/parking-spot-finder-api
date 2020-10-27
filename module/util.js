@@ -30,7 +30,7 @@ function reply (res, param) {
  * @param {ParkingLotStacks} parkingLotStacks parkingLotStacks that's sorted by rank
  * @returns {ParkingLotStack} nearest available parkingLotStack
  */
-function getNearestAvailableParkingLotStack (parkingLotEntryRank = 0, parkingLotStacks) {
+function getNearestAvailableParkingLotStack (location, parkingLotEntryRank = 0, parkingLotStacks) {
   // sort ranks
   const ranks = parkingLotStacks.map(item => item.parking_lot_rank)
   const sortedRanks = orderRanksByNearestRank(parkingLotEntryRank, ranks)

@@ -8,6 +8,39 @@ const parkingLotStackModel = require('../models/parking-models/parkingslot-stack
  * @param {Number} [param.parkingLotId=0]
  * @returns {Ticket}
  */
+
+async function getParkings(param){
+  const {
+    location, rank
+  } = param
+
+    // find all stacks 
+  const parkingLotStacks = await parkingLotStackModel.findAll({}, null, {sort : '-rank_per_floor'})
+
+
+  // find available slot
+  const availableParkingLotStack = util.getNearestAvailableParkingLotStack(location, rank, parkingLotStacks)
+  if (availableParkingLotStack === null) {
+    throw new Error('no available parking stack')
+  }
+  // if there has slot available
+  try {
+    // get the nearest slot id
+    const slotIds = JSON.parse(availableParkingLotStack.data)
+    const nearestSlotId = slotIds.shift()
+
+    // update stack (caching)
+    await parkingLotStackModel.update({
+      data: JSON.stringify(slotIds) // remaining slot ids
+    }, {
+      where: { id: availableParkingLotStack.id },
+    })
+
+
+  }catch(err){
+    return err
+  }
+}
 async function park (param) {
   const {
     plateNumber = '',
@@ -140,7 +173,24 @@ async function exit (param) {
   }
 }
 
+async function isStackFull(param){
+  try{
+    const {parkingLotId} = param
+    const the_stack = await parkingLotStackModel.findById(parkingLotId);
+    if(the_stack){
+      return the_stack.full_status
+    }
+
+    throw new Error('Stack dosen\'t exist')   
+  }
+  catch (error) {
+    return error
+  }  
+}
+
 module.exports = {
+  getParkings,
+  isStackFull,
   park,
   exit
 }
