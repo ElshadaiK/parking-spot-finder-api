@@ -9,22 +9,14 @@ const parkingLotStackModel = require('../models/parking-models/parkingslot-stack
  * @returns {Ticket}
  */
 async function park (param) {
-  debug(park.name)
   const {
-    vehicleSizeId = 0,
     plateNumber = '',
     parkingLotId = 0
   } = param
 
-  // find all stacks by slot_size_id
-  const parkingLot = await parkingLotStackModel.findAll({
-    where: {
-      slot_size_id: vehicleSizeId, // todo refactor this size id, now it the same
-      data: { [Op.not]: '[]' }
-    },
-    order: [['parking_lot_rank', 'asc']]
-  })
-  const parkingLotStacks = parkingLot.map(item => item.dataValues)
+  // find all stacks 
+const parkingLotStacks = await parkingLotStackModel.findAll({}, null, {sort : '-createdAt'})
+
 
   // find available slot
   const availableParkingLotStack = util.getNearestAvailableParkingLotStack(parkingLotId, parkingLotStacks)

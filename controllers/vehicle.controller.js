@@ -2,14 +2,12 @@ const vehicleService = require('../service/vehicleService')
 
 exports.park = async (req, res, next) => {
   const {
-    vehicleSizeId,
     plateNumber,
     parkingLotId // entry parking lot id
   } = req.body
 
   try {
     const ticket = await vehicleService.park({
-      vehicleSizeId,
       plateNumber,
       parkingLotId
     })

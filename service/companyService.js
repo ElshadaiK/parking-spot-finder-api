@@ -56,10 +56,9 @@ exports.insertCompany = async function (req, res){
                 $in: 'company' // [1,2,3]
             }
         });
-        let companyCoordinate = req.body.coordinate
+        let companyCoordinate = [req.body.latitude, req.body.longitude]
         const company = await companyModel.create({...req.body, roles: data,
             location : {
-                type: "Point",
                 coordinates: companyCoordinate
               }
         })

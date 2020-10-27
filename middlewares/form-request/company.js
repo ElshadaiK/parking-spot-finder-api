@@ -24,7 +24,8 @@ exports.companyFormRequest = schemaName => async (req,res,next) => {
                 slots_per_floor: Joi.number(),
                 rank_per_floor: Joi.number().min(0).max(5),
                 floor: Joi.number().min(1).max(10),
-                coordinates: Joi.array().items(Joi.number())
+                latitude: Joi.number().min(-90).max(90).required(),
+                longitude: Joi.number().min(-180).max(180).required()
             }),
         updateCompany: () => 
             Joi.object({
