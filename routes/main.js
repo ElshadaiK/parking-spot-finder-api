@@ -18,6 +18,8 @@ router.get('/', (req, res) => res.json({
 
 router.get('/parking_lot/status', hasPermissions(['view slot', 'view any slot']), parkingLotController.getParkingLotStacks);
 
+router.get('/getnearest',  vehicleController.getParkings);
+
 router.post('/vehicle/park', hasPermissions(['park car']) && validate('parkUser'), vehicleController.park);
 
 router.post('/vehicle/exit', hasPermissions(['unpark car']) && validate('unParkUser'), vehicleController.exit);

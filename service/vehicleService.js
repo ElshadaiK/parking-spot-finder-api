@@ -13,33 +13,30 @@ async function getParkings(param){
   const {
     location, rank
   } = param
-
-    // find all stacks 
-  const parkingLotStacks = await parkingLotStackModel.findAll({}, null, {sort : '-rank_per_floor'})
-
-
-  // find available slot
-  const availableParkingLotStack = util.getNearestAvailableParkingLotStack(location, rank, parkingLotStacks)
-  if (availableParkingLotStack === null) {
-    throw new Error('no available parking stack')
-  }
-  // if there has slot available
-  try {
-    // get the nearest slot id
-    const slotIds = JSON.parse(availableParkingLotStack.data)
-    const nearestSlotId = slotIds.shift()
-
-    // update stack (caching)
-    await parkingLotStackModel.update({
-      data: JSON.stringify(slotIds) // remaining slot ids
-    }, {
-      where: { id: availableParkingLotStack.id },
-    })
-
-
+  try{
+    await parkingLotStackModel.createIndex({ "location" : "2dshere"})
+    const nearestParkingStacks = await parkingLotStackModel.find(
+      {
+        "location" : {
+          $near: {
+            $geometry: {
+              type: "Point",
+              coordinates : location
+            },
+          }
+        }
+      }
+    )
+    if(nearestParkingStacks == null){
+      throw new Error('no available parking stack')
+    }
+    else{
+      return nearestParkingStacks
+    }
   }catch(err){
     return err
   }
+ 
 }
 async function park (param) {
   const {

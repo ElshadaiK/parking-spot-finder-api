@@ -7,7 +7,7 @@ const parkingLotStackModel = require('../models/parking-models/parkingslot-stack
  * @returns {ParkingLot}
  */
 
-exports.createParkingLotStacks = async function  (id, slots_per_floor, floors, rank_per_floor, res, floor_index) {
+exports.createParkingLotStacks = async function  (id, slots_per_floor, floors, rank_per_floor, Clocation, res, floor_index) {
   try {
     const parkingSlots  = []
         for (let i = 0; i < 5; i++) {
@@ -17,13 +17,13 @@ exports.createParkingLotStacks = async function  (id, slots_per_floor, floors, r
             })
             parkingSlots.push(slot)
         } 
-      await parkingLotStackModel.create({company: id, parking_slots: 
-        slots_per_floor, 
+      await parkingLotStackModel.create({company: id, 
+        parking_slots: slots_per_floor, 
+        location: Clocation,
         floor: floor_index, 
         parking_lot_rank: rank_per_floor, 
         slots: parkingSlots})
 
-    //   res.json(parkingLotStack)
   } catch (error) {
 
     throw new Error("Couldn't create parking lot stack")

@@ -17,7 +17,7 @@ exports.getParkings = async (req, res, next) => {
     catch (err) {
       res.status(404).json({
           error: true,
-          message: error
+          message: err
       });
 }
 }

@@ -5,6 +5,17 @@ const ParkingLotStack = new mongoose.Schema({
 
   company: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Companies' }],
 
+  location: {
+    type: {
+      type: String, 
+      enum: "Point", default: "Point",
+    },
+    coordinates: {
+      type: [Number],
+      required: true
+    }, 
+  },
+
   parking_slots : {type: Number},
   
   floor : {type: Number, default: 1},

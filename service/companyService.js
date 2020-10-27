@@ -62,7 +62,7 @@ exports.insertCompany = async function (req, res){
                 coordinates: companyCoordinate
               }
         })
-        const company_info = [company._id, company.slots_per_floor, company.floor, company.rank_per_floor]
+        const company_info = [company._id, company.slots_per_floor, company.floor, company.rank_per_floor, company.location]
         res.json(company)
         return company_info
     } catch (error) {
