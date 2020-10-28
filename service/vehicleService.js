@@ -65,7 +65,7 @@ exports.getAvailable = async function (param) {
   const the_slots =  the_stack.slots;
   let the_array =[]
   the_slots.forEach(slot => {
-    let slotToCheck = JSON.parse(slot);
+    let slotToCheck = (slot);
     if(slotToCheck.open_status) 
       {the_array.push(slotToCheck)}
   });

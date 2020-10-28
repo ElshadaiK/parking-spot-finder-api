@@ -45,8 +45,9 @@ exports.getAvailableSlots = async(req, res, next) => {
           throw new Error("Parking Stack already full")
         }
       }
-      
-    throw new Error('You have to login first') 
+      else{
+        throw new Error('You have to login first')
+      }
   }
     catch (err) {
       res.status(404).json({
