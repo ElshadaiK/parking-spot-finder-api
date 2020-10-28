@@ -37,20 +37,25 @@ exports.getParkings = async function (param){
 exports.park = async function (param) {
   const {
     plate_number,
-    the_stack,
+    parkingLotId,
     parkingSlotId
   } = param
-  const ticket = JSON.parse(the_stack.slots[parkingSlotId])
+  const the_stack = await parkingLotStackModel.findById(parkingLotId);
+
+  const ticket = (the_stack.slots[parkingSlotId])
+  if(!ticket){
+    throw new Error("parking slot doesn't exist")
+  }
   ticket.open_status = false;
   ticket.occupied_by = plate_number;
   ticket.start_time = Date.now();
-  const chosen_slot = JSON.stringify(ticket)
-  let all_slots = the_stack.slots.slice(0, parkingSlotId)
-  all_slots.push(chosen_slot)
-  all_slots.push(the_stack.slots.slice(parkingSlotId, parkingSlotId))
-  console.log(all_slots)
-  const updated = await parkingslotStackModel.findByIdAndUpdate({_id: the_stack._id}, {slots : JSON.stringify(all_slots)})
-    return chosen_slot
+  const updated = await parkingslotStackModel.findByIdAndUpdate(
+    the_stack._id, 
+    {'$set': {'slots.$[elem]': ticket}},
+    {arrayFilters: [ { "elem.index": parkingSlotId } ],}
+    
+    )
+    return updated
   } 
   /**
  * @param {Number} [param.parking_Stack_Id]
@@ -147,6 +152,6 @@ exports.isStackFull = async function (the_stack){
   return the_stack.full_status 
 }
 exports.isSlotEmpty = async function (parkingSlotId, the_stack){
-    const the_slot = JSON.parse((the_stack.slots)[parkingSlotId])
+    const the_slot = ((the_stack.slots)[parkingSlotId])
     return the_slot.open_status
 }
