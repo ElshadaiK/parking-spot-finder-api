@@ -49,11 +49,9 @@ exports.park = async function (param) {
   ticket.open_status = false;
   ticket.occupied_by = plate_number;
   ticket.start_time = Date.now();
-  const filter = { _id : the_stack._id }
  
   await the_stack.updateOne({
     index : parkingSlotId,
-    // slots : { $elemMatch: { index: parkingLotId } }
   }, 
   {'$set': {
     'slots.$.open_status': false,
@@ -166,4 +164,18 @@ exports.isStackFull = async function (the_stack){
 exports.isSlotEmpty = async function (parkingSlotId, the_stack){
     const the_slot = ((the_stack.slots)[parkingSlotId])
     return the_slot.open_status
+}
+exports.emptyTheStack = async function(parkingLotId){
+  const the_stack = await parkingLotStackModel.findById(parkingLotId);
+
+  const ticket = (the_stack.slots[0])
+  if(!ticket){
+    throw new Error("parking slot doesn't exist")
+  }
+  ticket.open_status = false;
+  ticket.occupied_by = plate_number;
+  ticket.start_time = Date.now();
+}
+exports.checkTheStack = async function(parkingLotId){
+  
 }
