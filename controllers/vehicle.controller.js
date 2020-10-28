@@ -13,7 +13,9 @@ exports.getParkingsNear = async (req, res, next) => {
       res.json(nearestStacks);
       return next()
     }
-    throw new Error('You have to login first') 
+    else{
+      throw new Error('You have to login first') 
+    }
   }
     catch (err) {
       res.status(404).json({
