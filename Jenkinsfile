@@ -38,12 +38,10 @@ spec:
         stage ("Deployment"){
             steps{
                 container ("kubectl"){
-              
-               
                 sh("sed -i.bak 's#gcr.io/gcr-project/sample:1.0.0#${IMAGE_TAG}#' ./Deployment/deploy.yaml")
                 sh("kubectl --namespace=${NAMESPACE} apply -f ./Deployment/deploy.yaml")
                 sh("kubectl --namespace=${NAMESPACE} apply -f ./Deployment/service.yaml")
-                sh("kubectl --namespace=${NAMESPACE} apply -f ./Deployment/ingress.yaml")   
+                sh("kubectl --namespace=${NAMESPACE} apply -f ./Deployment/ingress.yaml")
          }
          }
         }
