@@ -49,13 +49,25 @@ exports.park = async function (param) {
   ticket.open_status = false;
   ticket.occupied_by = plate_number;
   ticket.start_time = Date.now();
-  const updated = await parkingslotStackModel.findByIdAndUpdate(
+  const filter = { _id : the_stack._id }
+ 
+  await the_stack.updateOne({
+    index : parkingSlotId,
+    // slots : { $elemMatch: { index: parkingLotId } }
+  }, 
+  {'$set': {
+    'slots.$.open_status': false,
+    'slots.$.occupied_by': plate_number,
+    'slots.$.start_time': Date.now(),
+}}
+)
+ const updated = await parkingslotStackModel.findByIdAndUpdate(
     the_stack._id, 
-    {'$set': {'slots.$[elem]': ticket}},
-    {arrayFilters: [ { "elem.index": parkingSlotId } ],}
+    the_stack
     
     )
-    return updated
+
+  return ticket
   } 
   /**
  * @param {Number} [param.parking_Stack_Id]
