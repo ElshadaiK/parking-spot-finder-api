@@ -101,8 +101,10 @@ exports.getAvailable = async function (param) {
 exports.exit = async function  (param) {
   const { the_ticket } = param
   const exit_time = Date.now()
-  const price_calculated = ((exit_time - the_ticket.park_at)/3600000) * the_ticket.price_per_hour
-  const the_updated = await ticketModel.findByIdAndUpdate({_id: the_ticket._id},
+  const price_calculated = ((exit_time - the_ticket.park_at)/3600000) * the_ticket.price_per_hour;
+  const the_stack_id = the_ticket.stack_id;
+  const the_slot_id = the_ticket.slot_id
+  const the_updated_ticket = await ticketModel.findByIdAndUpdate({_id: the_ticket._id},
     {'$set': {exit_at: Date.now(), total_price: price_calculated}},
     {new: true}
     );
@@ -110,17 +112,17 @@ exports.exit = async function  (param) {
   
     // update slot status
 
-  const the_stack = await parkingLotStackModel.findById(the_ticket.stack_id);
+  const the_stack = await parkingLotStackModel.findById(the_stack_id);
  
   await the_stack.updateOne({
-    index : the_ticket.slot_id,
+    index : the_slot_id,
   }, 
   {'$set': {
     'slots.$.open_status': true,
     'slots.$.occupied_by': "",
     'slots.$.start_time': "",
 }}
-)
+);
 console.log(the_stack)
 const updated= await parkingslotStackModel.findByIdAndUpdate(
     the_stack._id, 
