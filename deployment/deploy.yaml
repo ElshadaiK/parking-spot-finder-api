@@ -20,8 +20,13 @@ spec:
       - name: car-api
         image: gcr.io/gcr-project/sample:1.0.0
         env:
-          - name: ASPNETCORE_ENVIRONMENT
-            value: development
+          - name: MONGODB_URL
+            valueFrom:
+                secretKeyRef:
+                  name: mongo-secret
+                  key: MONGODB_URL
+          - name: NODE_ENV
+            value: production
           - name: API_PATH
             value: /
         resources:
