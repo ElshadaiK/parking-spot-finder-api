@@ -26,7 +26,7 @@ router.post('/clearStack',  vehicleController.clear);
 
 router.post('/vehicle/park',  vehicleController.park);
 
-router.post('/vehicle/exit', hasPermissions(['unpark car']) && validate('unParkUser'), vehicleController.exit);
+router.post('/vehicle/exit',  vehicleController.exit);
 
 router.get('/ticket', hasPermissions(['get ticket']) && validate('ticketUser'), ticketController.getTickets);
 

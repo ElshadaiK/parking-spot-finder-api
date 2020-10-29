@@ -1,5 +1,6 @@
 const vehicleService = require('../service/vehicleService')
 const parkingLotStackModel = require('../models/parking-models/parkingslot-stack-model')
+const ticketModel = require('../models/parking-models/ticket-model')
 
 exports.getParkingsNear = async (req, res, next) => {
   const { user } = req
@@ -60,7 +61,8 @@ exports.getAvailableSlots = async(req, res, next) => {
 }
 exports.park = async (req, res, next) => {
   const { user } = req
-  const { parkingLotId, parkingSlotId } = req.body
+  const { parkingLotId } = req.body
+  const { parkingSlotId } = req.body
   const plate_number = user.data.plate_number
 
   try {
@@ -83,6 +85,11 @@ exports.park = async (req, res, next) => {
             parkingLotId,
             parkingSlotId
           });
+          const availables = await vehicleService.getAvailable({
+            parkingLotId
+          });
+
+          await vehicleService.checkTheStack(parkingLotId, availables)
       
           res.json(ticket);
           next();
@@ -116,13 +123,18 @@ exports.exit = async (req, res, next) => {
   } = req.body
 
   try {
-    await vehicleService.exit({ ticketId })
+    const the_ticket = await ticketModel.findById(ticketId);
+    // todo returns 404 instead
+    if (!the_ticket) throw new Error('not found ticket id')
+  
+    const ticketLeave = await vehicleService.exit({the_ticket})
 
-    res.json(ticketId)
+    await vehicleService.checkTheStack(the_ticket.stack_id)
+    res.json(ticketLeave)
   } catch (err) {
         res.status(404).json({
             error: true,
-            message: error
+            message: err.message
         });
     }
 }

@@ -42,13 +42,13 @@ exports.park = async function (param) {
   } = param
   const the_stack = await parkingLotStackModel.findById(parkingLotId);
 
-  const ticket = (the_stack.slots[parkingSlotId])
-  if(!ticket){
+  const the_chosen_slot = (the_stack.slots[parkingSlotId])
+  if(!the_chosen_slot){
     throw new Error("parking slot doesn't exist")
   }
-  ticket.open_status = false;
-  ticket.occupied_by = plate_number;
-  ticket.start_time = Date.now();
+  the_chosen_slot.open_status = false;
+  the_chosen_slot.occupied_by = plate_number;
+  the_chosen_slot.start_time = Date.now();
  
   await the_stack.updateOne({
     index : parkingSlotId,
@@ -62,9 +62,16 @@ exports.park = async function (param) {
  await parkingslotStackModel.findByIdAndUpdate(
     the_stack._id, 
     the_stack
-    
     )
-
+const ticket = await ticketModel.create({
+  plate_number, 
+  slot_id: parkingSlotId, 
+  stack_id: parkingLotId,
+  ticket_status: "occupied", 
+  park_at: the_chosen_slot.start_time,
+  exit_at: "",
+  price_per_hour : the_stack.price
+})
   return ticket
   } 
   /**
@@ -76,7 +83,7 @@ exports.getAvailable = async function (param) {
     parkingLotId
   } = param
 
-  const the_stack = await parkingLotStackModel.findById(parkingLotId);
+  const the_stack = await parkingLotStackModel.findById({_id: parkingLotId});
   const the_slots =  the_stack.slots;
   let the_array =[]
   the_slots.forEach(slot => {
@@ -92,70 +99,35 @@ exports.getAvailable = async function (param) {
  * @param {Number} param.ticketId
  */
 exports.exit = async function  (param) {
-  const { ticketId } = param
+  const { the_ticket } = param
+  const exit_time = Date.now()
+  const price_calculated = ((exit_time - the_ticket.park_at)/3600000) * the_ticket.price_per_hour
+  const the_updated = await ticketModel.findByIdAndUpdate({_id: the_ticket._id},
+    {'$set': {exit_at: Date.now(), total_price: price_calculated}},
+    {new: true}
+    );
 
-  const ticketModel = await db.Ticket.findOne({
-    where: { id: ticketId }
-  })
-  // todo returns 404 instead
-  if (!ticketModel) throw new Error('not found ticket id')
-  const ticket = ticketModel.dataValues
-
-  // if there has slot available
-  let transaction
-  try {
-    // get transaction
-    transaction = await db.sequelize.transaction()
-
-    // change the ticket
-    await db.Ticket.update({
-      ticket_status_id: constant.TICKET_STATUS.CLOSE,
-      exit_at: db.sequelize.literal('CURRENT_TIMESTAMP')
-    }, {
-      where: { id: ticket.id },
-      transaction
-    })
-
+  
     // update slot status
-    await db.Slot.update({
-      slot_status_id: constant.SLOT_STATUS.UNOCCUPIED
-    }, {
-      where: { id: ticket.slot_id },
-      transaction
-    })
 
-    // update parkingLotStack, current data
-    const { dataValues: slot } = await db.Slot.findOne({
-      where: { id: ticket.slot_id },
-      transaction
-    })
-    const { dataValues: parkingLotStack } = await parkingLotStackModel.findOne({
-      where: {
-        parking_lot_id: slot.parking_lot_id,
-        slot_size_id: slot.slot_size_id
-      },
-      transaction
-    })
-    // update parkingLotStack, update caching available slot ids
-    // we can sort slot rank by its id
-    const availableSlotIds = JSON.parse(parkingLotStack.data)
-    availableSlotIds.push(slot.id)
-    const sortedAvailableSlotIds = availableSlotIds.sort((a, b) => a - b) // asc (min => max)
-    await db.ParkingLotStack.update({
-      data: JSON.stringify(sortedAvailableSlotIds)
-    }, {
-      where: {
-        id: parkingLotStack.id
-      },
-      transaction
-    })
+  const the_stack = await parkingLotStackModel.findById(the_ticket.stack_id);
+ 
+  await the_stack.updateOne({
+    index : the_ticket.slot_id,
+  }, 
+  {'$set': {
+    'slots.$.open_status': true,
+    'slots.$.occupied_by': "",
+    'slots.$.start_time': "",
+}}
+)
+console.log(the_stack)
+const updated= await parkingslotStackModel.findByIdAndUpdate(
+    the_stack._id, 
+    the_stack
+    )
 
-    // commit
-    await transaction.commit()
-  } catch (err) {
-    // Rollback transaction only if the transaction object is defined
-    if (transaction) await transaction.rollback()
-  }
+    return updated
 }
 
 exports.isStackFull = async function (the_stack){
@@ -169,15 +141,6 @@ exports.emptyTheStack = async function(param){
   const {
     parkingLotId,
   } = param
-  const ticket = ({
-    open_status : true,
-    occupied_by : "",
-    start_time: "",
-    index: 0
-})
-  ticket.open_status = true;
-  ticket.occupied_by = "";
-  ticket.start_time = "";
 
 const updated = await parkingLotStackModel.findByIdAndUpdate({_id: parkingLotId},
   {'$set': {full_status: false, 'slots.$[].open_status': true, 'slots.$[].occupied_by': "", 'slots.$[].start_time': ""}},
@@ -186,6 +149,19 @@ const updated = await parkingLotStackModel.findByIdAndUpdate({_id: parkingLotId}
   return updated
 }
 
-exports.checkTheStack = async function(parkingLotId){
+exports.checkTheStack = async function(param){
+  const {
+      parkingLotId,
+      availables
+  } = param
+  let status;
+  if(availables == []) status = true
+  else status = false
+  
+  const updated = await parkingLotStackModel.findByIdAndUpdate(parkingLotId,
+    {'$set': {full_status: status}},
+    {new: true}
+    );
+    return updated
   
 }
