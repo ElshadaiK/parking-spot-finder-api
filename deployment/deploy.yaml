@@ -23,7 +23,7 @@ spec:
           - name: ASPNETCORE_ENVIRONMENT
             value: development
           - name: API_PATH
-            value: /api
+            value: /
         resources:
           limits:
             memory: "500Mi"
