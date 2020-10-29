@@ -59,7 +59,7 @@ exports.park = async function (param) {
     'slots.$.start_time': Date.now(),
 }}
 )
- const updated = await parkingslotStackModel.findByIdAndUpdate(
+ await parkingslotStackModel.findByIdAndUpdate(
     the_stack._id, 
     the_stack
     
@@ -165,17 +165,27 @@ exports.isSlotEmpty = async function (parkingSlotId, the_stack){
     const the_slot = ((the_stack.slots)[parkingSlotId])
     return the_slot.open_status
 }
-exports.emptyTheStack = async function(parkingLotId){
-  const the_stack = await parkingLotStackModel.findById(parkingLotId);
+exports.emptyTheStack = async function(param){
+  const {
+    parkingLotId,
+  } = param
+  const ticket = ({
+    open_status : true,
+    occupied_by : "",
+    start_time: "",
+    index: 0
+})
+  ticket.open_status = true;
+  ticket.occupied_by = "";
+  ticket.start_time = "";
 
-  const ticket = (the_stack.slots[0])
-  if(!ticket){
-    throw new Error("parking slot doesn't exist")
-  }
-  ticket.open_status = false;
-  ticket.occupied_by = plate_number;
-  ticket.start_time = Date.now();
+const updated = await parkingLotStackModel.findByIdAndUpdate({_id: parkingLotId},
+  {'$set': {full_status: false, 'slots.$[].open_status': true, 'slots.$[].occupied_by': "", 'slots.$[].start_time': ""}},
+  {new: true}
+  );
+  return updated
 }
+
 exports.checkTheStack = async function(parkingLotId){
   
 }

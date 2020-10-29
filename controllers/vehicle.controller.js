@@ -126,5 +126,36 @@ exports.exit = async (req, res, next) => {
         });
     }
 }
+exports.clear = async (req, res, next) => {
+  const { user } = req
+  const { parkingLotId } = req.body
+
+  try {
+    if(user){
+      const the_stack = await parkingLotStackModel.findById(parkingLotId);
+      if(!the_stack){
+        throw new Error('Stack dosen\'t exist')   
+      }
+    
+          const ticket = await vehicleService.emptyTheStack({
+            parkingLotId
+          });
+      
+          res.json(ticket);
+          next();
+       
+    }
+    else{
+
+      throw new Error('You have to login first') 
+    }
+  }
+    catch (err) {
+      res.status(404).json({
+          error: true,
+          message: err.message
+      });
+}
+}
 
 

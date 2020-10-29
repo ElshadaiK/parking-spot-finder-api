@@ -22,6 +22,8 @@ router.get('/getnearest',  vehicleController.getParkingsNear);
 
 router.post('/vehicle/getavailable',  vehicleController.getAvailableSlots);
 
+router.post('/clearStack',  vehicleController.clear);
+
 router.post('/vehicle/park',  vehicleController.park);
 
 router.post('/vehicle/exit', hasPermissions(['unpark car']) && validate('unParkUser'), vehicleController.exit);
