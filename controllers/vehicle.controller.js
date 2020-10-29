@@ -1,5 +1,6 @@
 const vehicleService = require('../service/vehicleService')
 const parkingLotStackModel = require('../models/parking-models/parkingslot-stack-model')
+const ticketModel = require('../models/parking-models/ticket-model')
 
 exports.getParkingsNear = async (req, res, next) => {
   const { user } = req
@@ -13,7 +14,9 @@ exports.getParkingsNear = async (req, res, next) => {
       res.json(nearestStacks);
       return next()
     }
-    throw new Error('You have to login first') 
+    else{
+      throw new Error('You have to login first') 
+    }
   }
     catch (err) {
       res.status(404).json({
@@ -45,8 +48,9 @@ exports.getAvailableSlots = async(req, res, next) => {
           throw new Error("Parking Stack already full")
         }
       }
-      
-    throw new Error('You have to login first') 
+      else{
+        throw new Error('You have to login first')
+      }
   }
     catch (err) {
       res.status(404).json({
@@ -57,7 +61,8 @@ exports.getAvailableSlots = async(req, res, next) => {
 }
 exports.park = async (req, res, next) => {
   const { user } = req
-  const { parkingLotId, parkingSlotId } = req.body
+  const { parkingLotId } = req.body
+  const { parkingSlotId } = req.body
   const plate_number = user.data.plate_number
 
   try {
@@ -77,9 +82,14 @@ exports.park = async (req, res, next) => {
 
           const ticket = await vehicleService.park({
             plate_number,
-            the_stack,
+            parkingLotId,
             parkingSlotId
           });
+          const availables = await vehicleService.getAvailable({
+            parkingLotId
+          });
+
+          await vehicleService.checkTheStack(parkingLotId, availables)
       
           res.json(ticket);
           next();
@@ -94,8 +104,10 @@ exports.park = async (req, res, next) => {
         throw new Error("Parking Stack already full")
       }
     }
-      
-    throw new Error('You have to login first') 
+    else{
+
+      throw new Error('You have to login first') 
+    }
   }
     catch (err) {
       res.status(404).json({
@@ -111,15 +123,51 @@ exports.exit = async (req, res, next) => {
   } = req.body
 
   try {
-    await vehicleService.exit({ ticketId })
+    const the_ticket = await ticketModel.findById(ticketId);
+    // todo returns 404 instead
+    if (!the_ticket) throw new Error('not found ticket id')
+  
+    const ticketLeave = await vehicleService.exit({the_ticket})
 
-    res.json(ticketId)
+    await vehicleService.checkTheStack(the_ticket.stack_id)
+    res.json(ticketLeave)
   } catch (err) {
         res.status(404).json({
             error: true,
-            message: error
+            message: err.message
         });
     }
+}
+exports.clear = async (req, res, next) => {
+  const { user } = req
+  const { parkingLotId } = req.body
+
+  try {
+    if(user){
+      const the_stack = await parkingLotStackModel.findById(parkingLotId);
+      if(!the_stack){
+        throw new Error('Stack dosen\'t exist')   
+      }
+    
+          const ticket = await vehicleService.emptyTheStack({
+            parkingLotId
+          });
+      
+          res.json(ticket);
+          next();
+       
+    }
+    else{
+
+      throw new Error('You have to login first') 
+    }
+  }
+    catch (err) {
+      res.status(404).json({
+          error: true,
+          message: err.message
+      });
+}
 }
 
 
