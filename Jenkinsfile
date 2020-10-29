@@ -1,7 +1,7 @@
 pipeline {
   environment {
     PROJECT = "trainee-2020-6-dagmawit"
-    APP_NAME = "backend"
+    APP_NAME = "car-parking-spots-api"
     NAMESPACE= "car-parking-spot-app"
     IMAGE_TAG = "gcr.io/${PROJECT}/${APP_NAME}:${env.BRANCH_NAME}.${BUILD_NUMBER}"
   }
