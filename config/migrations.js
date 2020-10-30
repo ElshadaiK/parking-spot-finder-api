@@ -87,7 +87,7 @@ const users = [
         email: 'super@admin.com',
         password: 'superuser',
         roles: ['admin'],
-        plate_number : 00000,
+        plate_number : 111111,
         phone_no : +251900000000
 
     }
