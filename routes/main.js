@@ -18,7 +18,7 @@ router.get('/', (req, res) => res.json({
 
 router.get('/parking_lot/status', hasPermissions(['view slot', 'view any slot']), parkingLotController.getParkingLotStacks);
 
-router.get('/getnearest',  vehicleController.getParkingsNear);
+router.post('/getnearest',  vehicleController.getParkingsNear);
 
 router.post('/vehicle/getavailable',  vehicleController.getAvailableSlots);
 
