@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt')
 
 const OfficerSchema = new mongoose.Schema({
     company: { type: mongoose.Schema.Types.ObjectId, ref: 'Company' },
-    username: { type: String, default: '' },
+    email: { type: String, required: true },
     password: { type: String, required: true, minlength: 8, maxlength: 128},
     password_changed_at: { type: Date },
     active: { type: Boolean, default: true },

@@ -37,8 +37,8 @@ exports.companyFormRequest = schemaName => async (req,res,next) => {
             }),
         createOfficer: () => 
             Joi.object({
-                username: Joi.string()
-                    .alphanum()
+                email: Joi.string()
+                    .email()
                     .min(3)
                     .max(30)
                     .required(),

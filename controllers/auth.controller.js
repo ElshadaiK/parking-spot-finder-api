@@ -4,14 +4,20 @@ const Joi = require('joi');
 const { jwt_key } = require('../config/vars')
 const userModel = require('../models/user-model')
 const roleModel = require('../models/role-model')
+const officerModel = require('../models/officer-model')
 
 
 exports.login = async (req, res) => {
 
     try {
-        const user = await userModel.findOne({
+        let user = await officerModel.findOne({
             email: req.body.email
         }).populate({ path: 'roles', populate: {path: 'permissions'} });
+        if(!user){
+            user = await userModel.findOne({
+                email: req.body.email
+            }).populate({ path: 'roles', populate: {path: 'permissions'} });
+        }
 
         if(user && await user.verifyPassword(req.body.password)){
             // 1. map through all roles

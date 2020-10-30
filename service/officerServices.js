@@ -1,6 +1,7 @@
 const { pick } = require('lodash')
 const officerModel = require('../models/officer-model');
 const roleModel = require('../models/role-model');
+const { findCompanyById } = require('./companyService');
 
 
 exports.findAllOfficers = async function (req, res){
@@ -57,7 +58,9 @@ exports.insertOfficer = async function (req, res){
                 $in: 'parking_officer' // [1,2,3]
             }
         })
-        const officer = await officerModel.create({...req.body, roles: data})
+        const {user} = req
+        const companyId = user.data._id
+        const officer = await officerModel.create({...req.body, roles: data, company: companyId})
 
         res.json(officer)
     } catch (error) {
