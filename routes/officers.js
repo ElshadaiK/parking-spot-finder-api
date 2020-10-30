@@ -13,7 +13,7 @@ const companyController = require('../controllers/company.controller')
 /**
  * Returns ALL Officers
  * 
- * @route GET /companies/officers
+ * @route GET /officers
  * @group OFFICER - Deals with all CRUD operations with officer model
  * @param {string} sort.query - sort parament
  * @param {string} page.query - set the page number
@@ -27,7 +27,7 @@ const companyController = require('../controllers/company.controller')
  /**
   * Create a new officer 
   * 
-  * @route GET /companies/officers/{id}
+  * @route GET /officers/{id}
   * @group OFFICER 
   * @param {string} id.path.required - officer id
   * @security JWT
@@ -40,7 +40,7 @@ const companyController = require('../controllers/company.controller')
  /**
   * Create a officer user 
   * 
-  * @route POST /companies/officers/
+  * @route POST /officers/
   * @group OFFICER 
   * @param {OFFICER.model} officer.body.required - the officer user
   * @security JWT
@@ -52,7 +52,7 @@ const companyController = require('../controllers/company.controller')
  /**
   * Update an existing officer by id 
   * 
-  * @route PATCH /companies/officers/:id
+  * @route PATCH /officers/:id
   * @group OFFICER
   * @param {string} id.path.required - officer id
   * @param {OFFICER.model} officer.body - the new officer object
@@ -65,7 +65,7 @@ const companyController = require('../controllers/company.controller')
  /**
   * Remove a new officer  with id
   * 
-  * @route DELETE /companies/officers/{id}
+  * @route DELETE /officers/{id}
   * @group OFFICER 
   * @param {string} id.path.required - officer id
   * @security JWT
