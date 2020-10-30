@@ -20,7 +20,7 @@ exports.getParkings = async function (param){
           $near: {
             $geometry: {
               type: "Point",
-              coordinates : [latitude, longitude]
+              coordinates : [longitude, latitude]
             },
           }
         }
