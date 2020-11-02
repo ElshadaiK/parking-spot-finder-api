@@ -4,11 +4,8 @@ const TicketSchema = new mongoose.Schema({
     plate_number: {
       type: String
     },
-    stack_id: {
-      type: String
-    },
     slot_id: {
-      type: Number
+      type: mongoose.Schema.Types.ObjectId, ref: 'ParkingSlot'
     },
     ticket_status: {
       type: String

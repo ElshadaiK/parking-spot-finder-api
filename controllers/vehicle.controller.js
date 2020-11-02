@@ -68,6 +68,7 @@ exports.park = async (req, res, next) => {
   try {
     if(user){
       const the_stack = await parkingLotStackModel.findById(parkingLotId);
+      const price = the_stack.price
       if(!the_stack){
         throw new Error('Stack dosen\'t exist')   
       }
@@ -82,8 +83,8 @@ exports.park = async (req, res, next) => {
 
           const ticket = await vehicleService.park({
             plate_number,
-            parkingLotId,
-            parkingSlotId
+            parkingSlotId,
+            price
           });
           const availables = await vehicleService.getAvailable({
             parkingLotId
