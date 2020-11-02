@@ -88,6 +88,19 @@ router.post('/vehicle/park',  vehicleController.park);
 /**
  * Returns Ticket
  * 
+ * @route POST /vehicle/reserve
+ * @group TICKET - Returns the ticket when a user reserves
+ * @param {string} stack_id.path.required - parking stack id
+ * @param {string} slot_id.path.required - parking slot id
+ * @security JWT
+ * @returns {object} 200 - The ticket
+ * @returns {Error}  default - Unexpected error
+ */
+ router.post('/vehicle/reserve',  vehicleController.reserve);
+
+/**
+ * Returns Ticket
+ * 
  * @route POST /vehicle/park
  * @group TICKET - Returns the ticket when a leaves
  * @param {string} ticket_id.path.required - ticket id of parking
