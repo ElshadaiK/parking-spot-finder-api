@@ -185,5 +185,63 @@ exports.clear = async (req, res, next) => {
       });
 }
 }
+exports.reserve = async(req, res, next) => {
+  const { user } = req
+  const { parkingLotId } = req.body
+  const { parkingSlotId } = req.body
+  const plate_number = user.data.plate_number
+
+  try {
+    if(user){
+      const the_stack = await parkingLotStackModel.findById(parkingLotId);
+      const price = the_stack.price
+      if(!the_stack){
+        throw new Error('Stack dosen\'t exist')   
+      }
+      const fullStatus = await vehicleService.isStackFull(the_stack)
+      if(!fullStatus){
+
+        if(parkingSlotId){
+
+          const isSlotEmpty = await vehicleService.isSlotEmpty(parkingSlotId, the_stack);
+
+          if(!isSlotEmpty){ throw new Error("Slot already occupied")}
+
+          const ticket = await vehicleService.reserve({
+            plate_number,
+            parkingSlotId,
+            price
+          });
+          const availables = await vehicleService.getAvailable({
+            parkingLotId
+          });
+
+          await vehicleService.checkTheStack(parkingLotId, availables)
+      
+          res.json(ticket);
+          next();
+        }
+        else{
+          // pick slot
+          throw new Error("Pick your slot")
+        }
+      }
+          
+      else{
+        throw new Error("Parking Stack already full")
+      }
+    }
+    else{
+
+      throw new Error('You have to login first') 
+    }
+  }
+    catch (err) {
+      res.status(404).json({
+          error: true,
+          message: err.message
+      });
+}
+}
 
 

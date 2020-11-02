@@ -60,6 +60,31 @@ const ticket = await ticketModel.create({
 
   return ticket
   } 
+
+exports.reserve = async function (param) {
+  const {
+    plate_number,
+    parkingSlotId,
+    price
+  } = param
+  let data = await statusModel.find({
+    statusName: {
+        $in: 'PENDING' // [1,2,3]
+    }
+});
+const ticket = await ticketModel.create({
+  plate_number, 
+  slot_id: parkingSlotId,
+  ticket_status: "reserved", 
+  park_at: Date.now(),
+  exit_at: "",
+  price_per_hour : price
+});
+  const updatedSlot = await slotModel.findByIdAndUpdate(parkingSlotId, {status : data, occupied_by: ticket._id})
+
+
+  return ticket
+  } 
   /**
  * @param {Number} [param.parking_Stack_Id]
  * @returns {Parking Slots}
