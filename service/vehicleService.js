@@ -3,6 +3,8 @@ const util = require('../module/util')
 const parkingLotStackModel = require('../models/parking-models/parkingslot-stack-model');
 const ticketModel = require('../models/parking-models/ticket-model');
 const parkingslotStackModel = require('../models/parking-models/parkingslot-stack-model');
+const slotModel = require('../models/parking-models/parking-slot-model');
+const statusModel = require('../models/parking-models/parking-slot-status-model')
 
 /**
  * @param {Array} [param.location='']
@@ -82,16 +84,16 @@ exports.getAvailable = async function (param) {
   const {
     parkingLotId
   } = param
+  let data = await statusModel.find({
+    statusName: {
+        $in: 'FREE' // [1,2,3]
+    }
+});
 
-  const the_stack = await parkingLotStackModel.findById({_id: parkingLotId});
-  const the_slots =  the_stack.slots;
-  let the_array =[]
-  the_slots.forEach(slot => {
-    let slotToCheck = (slot);
-    if(slotToCheck.open_status) 
-      {the_array.push(slotToCheck)}
-  });
-  return the_array
+  const the_stack = await slotModel.find({
+    stack: parkingLotId, status: data
+  }).populate('status', 'statusName' );
+  return the_stack
 
   } 
 
@@ -136,7 +138,7 @@ exports.isStackFull = async function (the_stack){
   return the_stack.full_status 
 }
 exports.isSlotEmpty = async function (parkingSlotId, the_stack){
-    const the_slot = ((the_stack.slots)[parkingSlotId])
+    const the_slot = await slotModel.findById(parkingSlotId)
     return the_slot.open_status
 }
 exports.emptyTheStack = async function(param){
@@ -144,10 +146,16 @@ exports.emptyTheStack = async function(param){
     parkingLotId,
   } = param
 
-const updated = await parkingLotStackModel.findByIdAndUpdate({_id: parkingLotId},
-  {'$set': {full_status: false, 'slots.$[].open_status': true, 'slots.$[].occupied_by': "", 'slots.$[].start_time': ""}},
+const updatedStack = await parkingLotStackModel.findByIdAndUpdate({_id: parkingLotId},
+  {'$set': {full_status: false}},
   {new: true}
   );
+  let data = await statusModel.find({
+    statusName: {
+        $in: 'FREE' 
+    }
+});
+const updatedSlots = await slotModel
   return updated
 }
 

@@ -40,6 +40,7 @@ exports.connect = () => {
       await migration.migratePermissions()
       await migration.migrateRoles()
       await migration.migrateUsers()
+      await migration.migrateStatus()
     });
   return mongoose.connection;
 };

@@ -92,5 +92,16 @@ const users = [
 
     }
 ]
+const slotStatus = [
+    {
+        statusName: "OCCUPIED"
+    },
+    {
+        statusName: "FREE"
+    },
+    {
+        statusName: "PENDING"
+    }
+]
 
-module.exports = { permissions, roles, users }
+module.exports = { permissions, roles, users, slotStatus }

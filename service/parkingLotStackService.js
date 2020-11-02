@@ -1,5 +1,5 @@
 const parkingLotStackModel = require('../models/parking-models/parkingslot-stack-model');
-
+const slotService = require('./slotServices')
 /**
  * @param {String} param.name
  * @param {Number} param.rank integer number
@@ -9,24 +9,15 @@ const parkingLotStackModel = require('../models/parking-models/parkingslot-stack
 
 exports.createParkingLotStacks = async function  (id, slots_per_floor, floors, rank_per_floor, Clocation, Cprice, res, floor_index) {
   try {
-    const parkingSlots  = []
-        for (let i = 0; i < slots_per_floor; i++) {
-            let slot = ({
-                open_status : true,
-                occupied_by : "",
-                start_time: "",
-                index: i
-            })
-            parkingSlots.push(slot)
-        } 
-      await parkingLotStackModel.create({company: id, 
+    let newStack = await parkingLotStackModel.create({company: id, 
         parking_slots: slots_per_floor, 
         location: Clocation,
         floor: floor_index, 
         parking_lot_rank: rank_per_floor, 
-        slots: parkingSlots,
+        slots: slots_per_floor,
         price: Cprice    
-      })
+      });
+      await slotService.createParkingSlots(newStack._id, slots_per_floor)
 
   } catch (error) {
 

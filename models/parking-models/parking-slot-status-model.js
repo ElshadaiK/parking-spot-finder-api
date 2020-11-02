@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const ParkingSlotStatus = new mongoose.Schema({
 
-  status: [{ type: String}],
+  statusName: [{ type: String}],
 
 },{timestamps: {createdAt: 'created_at', modifiedAt: 'modified_at'}
 });
