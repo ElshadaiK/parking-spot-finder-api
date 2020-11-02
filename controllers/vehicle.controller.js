@@ -1,6 +1,7 @@
 const vehicleService = require('../service/vehicleService')
 const parkingLotStackModel = require('../models/parking-models/parkingslot-stack-model')
 const ticketModel = require('../models/parking-models/ticket-model')
+const parkingSlotModel = require('../models/parking-models/parking-slot-model')
 
 exports.getParkingsNear = async (req, res, next) => {
   const { user } = req
@@ -125,13 +126,27 @@ exports.exit = async (req, res, next) => {
 
   try {
     const the_ticket = await ticketModel.findById(ticketId);
-    // todo returns 404 instead
+    
     if (!the_ticket) throw new Error('not found ticket id')
-  
-    const ticketLeave = await vehicleService.exit({the_ticket})
+    if(the_ticket.ticket_status == "occupied"){
+      const the_slot = await parkingSlotModel.findById(the_ticket.slot_id);
+      const the_stack_id = the_slot.stack[0];
+        
+    
+      const ticketLeave = await vehicleService.exit({the_ticket})
+      const availables = await vehicleService.getAvailable({
+        the_stack_id
+      });
 
-    await vehicleService.checkTheStack(the_ticket.stack_id)
-    res.json(ticketLeave)
+      await vehicleService.checkTheStack(the_slot._id, availables)
+
+      res.json(ticketLeave);
+      next();
+    }
+    else{
+      throw new Error("Ticket already processed")
+    }
+
   } catch (err) {
         res.status(404).json({
             error: true,
