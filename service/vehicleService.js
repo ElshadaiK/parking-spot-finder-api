@@ -146,17 +146,17 @@ exports.emptyTheStack = async function(param){
     parkingLotId,
   } = param
 
-const updatedStack = await parkingLotStackModel.findByIdAndUpdate({_id: parkingLotId},
-  {'$set': {full_status: false}},
-  {new: true}
-  );
-  let data = await statusModel.find({
-    statusName: {
-        $in: 'FREE' 
-    }
-});
-const updatedSlots = await slotModel
-  return updated
+  const updatedStack = await parkingLotStackModel.findByIdAndUpdate({_id: parkingLotId},
+    {'$set': {full_status: false}},
+    {new: true}
+    );
+    let data = await statusModel.find({
+      statusName: {
+          $in: 'FREE' 
+      }
+  });
+  const updatedSlots = await slotModel.updateMany({stack: parkingLotId}, {status: data})
+    return updatedStack
 }
 
 exports.checkTheStack = async function(param){
