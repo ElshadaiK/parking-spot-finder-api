@@ -60,7 +60,12 @@ const ticket = await ticketModel.create({
 
   return ticket
   } 
-
+/**
+ * @param {String} [param.plate_number]
+ * @param {Number} [param.parking_Stack_Id]
+ * @param {Number} [param.parking_Lot_Id]
+ * @returns {Ticket}
+ */
 exports.reserve = async function (param) {
   const {
     plate_number,
