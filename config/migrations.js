@@ -87,10 +87,21 @@ const users = [
         email: 'super@admin.com',
         password: 'superuser',
         roles: ['admin'],
-        plate_number : 00000,
+        plate_number : 111111,
         phone_no : +251900000000
 
     }
 ]
+const slotStatus = [
+    {
+        statusName: "OCCUPIED"
+    },
+    {
+        statusName: "FREE"
+    },
+    {
+        statusName: "PENDING"
+    }
+]
 
-module.exports = { permissions, roles, users }
+module.exports = { permissions, roles, users, slotStatus }

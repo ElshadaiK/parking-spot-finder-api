@@ -4,7 +4,7 @@ const mongoosePaginate = require('mongoose-paginate-v2');
 const bcrypt = require('bcrypt')
 
 const companySchema = new mongoose.Schema({
-    name: { type: String, required: true},
+    name: { type: String, unique: true, required: true},
     email: { type: String, unique: true, trim: true, lowercase: true, required: true},
     password: { type: String, required: true, minlength: 8, maxlength: 128},
     password_changed_at: { type: Date },

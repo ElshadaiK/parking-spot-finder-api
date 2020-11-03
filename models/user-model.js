@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema({
     password: { type: String, required: true, minlength: 8, maxlength: 128},
     password_changed_at: { type: Date },
     phone_no : {type: Number, required: true},
-    plate_number : { type : Number, required: true},
+    plate_number : { type : String, required: true},
 
     active: { type: Boolean, default: true },
     push_token: { type: String, default: '' },

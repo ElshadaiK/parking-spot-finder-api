@@ -17,7 +17,8 @@ exports.userFormRequest = schemaName => async (req,res,next) => {
                 repeat_password: Joi.ref('password'),
             
                 email: Joi.string()
-                    .email()
+                    .email(),
+                plate_number : Joi.string().required().min(5)
             }),
         updateUser: () => 
             Joi.object({
