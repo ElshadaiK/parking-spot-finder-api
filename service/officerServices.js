@@ -60,7 +60,8 @@ exports.insertOfficer = async function (req, res){
         })
         const {user} = req
         const companyId = user.data._id
-        const officer = await officerModel.create({...req.body, roles: data, company: companyId})
+        const companyName = user.data.name
+        const officer = await officerModel.create({...req.body, email: `${req.body.name}@${companyName}.com`, roles: data, company: companyId})
 
         res.json(officer)
     } catch (error) {
