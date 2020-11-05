@@ -20,7 +20,7 @@ spec:
       - name: car-api
         image: gcr.io/gcr-project/sample:1.0.0
         env:
-          - name: MONGODB_URL
+          - name: MONGO_URI
             valueFrom:
                 secretKeyRef:
                   name: mongo-secret
