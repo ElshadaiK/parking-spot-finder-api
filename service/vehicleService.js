@@ -111,6 +111,22 @@ exports.getAvailable = async function (param) {
 
   } 
 
+exports.getOccupied = async function (param) {
+  const {
+    parkingLotId
+  } = param
+  let data = await statusModel.find({
+    statusName: {
+        $in: 'OCCUPIED' // [1,2,3]
+    }
+});
+
+  const the_stack = await slotModel.find({
+    stack: parkingLotId, status: data
+  }).populate('status', 'statusName' );
+  return the_stack
+
+  } 
 /**
  * @param {Number} param.ticketId
  */

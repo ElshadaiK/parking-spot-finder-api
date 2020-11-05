@@ -1,5 +1,5 @@
 const Joi = require('joi');
-
+const Joi_Num = Joi.extend(require('joi-phone-number'));
 
 exports.companyFormRequest = schemaName => async (req,res,next) => {
     let validationObjects = {
@@ -37,8 +37,7 @@ exports.companyFormRequest = schemaName => async (req,res,next) => {
             }),
         createOfficer: () => 
             Joi.object({
-                email: Joi.string()
-                    .email()
+                name: Joi.string()
                     .min(3)
                     .max(30)
                     .required(),
@@ -47,10 +46,8 @@ exports.companyFormRequest = schemaName => async (req,res,next) => {
                     .pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')),
             
                 repeat_password: Joi.ref('password'),
+                phone_no : Joi_Num.string().phoneNumber().required(),
             
-                working_date: Joi.array(),
-                works_from: Joi.number(),
-                works_to: Joi.number()
             }),
         updateOfficer: () => 
             Joi.object({

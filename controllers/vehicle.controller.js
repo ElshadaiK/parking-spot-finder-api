@@ -28,7 +28,16 @@ exports.getParkingsNear = async (req, res, next) => {
 }
 exports.getAvailableSlots = async(req, res, next) => {
   const { user } = req
-  const { parkingLotId } = req.body
+  let { parkingLotId } = req.body
+  let companyId = user.data.company ? user.data.company : user.data._id
+
+  if(!parkingLotId){
+    parkingLotId = await parkingLotStackModel.findOne({
+      company: {
+          $in: companyId // [1,2,3]
+      }
+    })
+  }
 
   try {
     if(user){
@@ -60,11 +69,60 @@ exports.getAvailableSlots = async(req, res, next) => {
       });
 }
 }
+exports.getOccupiedSlots = async(req, res, next) => {
+  const { user } = req
+  let { parkingLotId } = req.body
+  let companyId = user.data.company ? user.data.company : user.data._id
+
+  if(!parkingLotId){
+    parkingLotId = await parkingLotStackModel.findOne({
+      company: {
+          $in: companyId // [1,2,3]
+      }
+    })
+  }
+
+  try {
+    if(user){
+      const the_stack = await parkingLotStackModel.findById(parkingLotId);
+      if(!the_stack){
+        throw new Error('Stack dosen\'t exist')   
+      }
+      const availables = await vehicleService.getOccupied({
+        parkingLotId
+      });
+  
+      res.json(availables);
+      next();
+        
+      }
+      else{
+        throw new Error('You have to login first')
+      }
+  }
+    catch (err) {
+      res.status(404).json({
+          error: true,
+          message: err.message
+      });
+}
+}
 exports.park = async (req, res, next) => {
   const { user } = req
-  const { parkingLotId } = req.body
+  let { parkingLotId } = req.body
   const { parkingSlotId } = req.body
-  const plate_number = user.data.plate_number
+  let plate_number = user.data.plate_number
+  if(!plate_number) {
+    plate_number = req.body.plate_number
+  }
+
+  if(user.data.company){
+    parkingLotId = await parkingLotStackModel.findOne({
+        company: {
+            $in: user.data.company // [1,2,3]
+        }
+    })
+  }
 
   try {
     if(user){

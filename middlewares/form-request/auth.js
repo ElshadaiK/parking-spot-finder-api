@@ -1,7 +1,6 @@
 const Joi = require('joi');
 const Joi_Num = Joi.extend(require('joi-phone-number'));
 
-
 exports.authFormRequest = schemaName => async (req,res,next) => {
     let validationObjects = {
         loginUser: () => 

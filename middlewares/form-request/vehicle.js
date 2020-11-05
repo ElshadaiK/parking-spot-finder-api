@@ -15,6 +15,7 @@ exports.vehicleFormRequest = schemaName => async (req,res,next) => {
             Joi.object({
                 parkingLotId: Joi.string().required(),
                 parkingSlotId: Joi.string().required(),
+                plate_number: Joi.number()
             }),
         exit: () => 
             Joi.object({

@@ -40,6 +40,18 @@ router.post('/getnearest', vehicleFormRequest('getNearest'), vehicleController.g
 router.post('/vehicle/getavailable', vehicleFormRequest('getAvailable'), vehicleController.getAvailableSlots);
 
 /**
+ * Returns Parking Slots
+ * 
+ * @route POST /main/vehicle/getOccupied
+ * @group MAIN - Returns list of occupied parking slots
+ * @param {string} parkingLotId.body.required - parking stack id
+ * @security JWT
+ * @returns {object} 200 - Array of slots in the parking slot
+ * @returns {Error}  default - Unexpected error
+ */
+ router.post('/vehicle/getOccupied', vehicleFormRequest('getAvailable'), vehicleController.getOccupiedSlots);
+
+/**
  * Returns Parking Stack
  * 
  * @route POST /main/clearStack
