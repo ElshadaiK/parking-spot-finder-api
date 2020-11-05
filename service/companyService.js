@@ -78,8 +78,10 @@ exports.updateACompany = async function(req, res){
         const { user} = req
         let company = await companyModel.findById(req.params.id)
         if(company) {
-            company = await companyModel.updateOne({_id: company._id}, req.body)
-            return res.json(company)
+            company = await companyModel.updateOne({_id: company._id}, req.body, {new: true})
+            const company_info = [company._id, company.slots_per_floor, company.floor, company.rank_per_floor, company.location, company.charge]
+            res.json(company)
+            return company_info
         }
 
         throw new Error('Company dosen\'t exist')

@@ -29,6 +29,20 @@ exports.createParkingSlots = async function  (stack_id, slots_per_floor) {
 
   }
 }
+exports.removeSlots = async function  (stack_id, slots_per_floor) {
+  try {
+    for (let index = 0; index < slots_per_floor; index++) {
+       await slotModel.remove({
+            stack: stack_id
+        });
+    }
+
+  } catch (error) {
+
+    throw new Error("Couldn't delete parking slot")
+
+  }
+}
 
 /**
  * @param {Object} [param={}]
