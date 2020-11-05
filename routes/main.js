@@ -16,7 +16,7 @@ const vehicleController = require('../controllers/vehicle.controller')
  * Returns API status
  * 
  * @route GET /
- * @group index - Validates and gives back API service status
+ * @group MAIN - Validates and gives back API service status
  * @returns {object} 200 - {
  *  title: 'Parking Spot finder',
  *  version: '1.0.0',
@@ -37,9 +37,9 @@ router.get('/parking_lot/status', hasPermissions(['view slot', 'view any slot'])
  * Returns Parking Stacks
  * 
  * @route POST /getnearest
- * @group TICKET - Returns list of parking stacks
- * @param {string} longitude.body.required - user longitude
- * @param {string} latitude.body.required - user latitude
+ * @group MAIN - Returns list of parking stacks
+ * @param {number} longitude.body.required - user longitude
+ * @param {number} latitude.body.required - user latitude
  * @security JWT
  * @returns {object} 200 - Array of stacks sorted by distance from current position
  * @returns {Error}  default - Unexpected error
@@ -50,7 +50,7 @@ router.post('/getnearest', vehicleFormRequest('getNearest'), vehicleController.g
  * Returns Parking Slots
  * 
  * @route POST /vehicle/getavailable
- * @group TICKET - Returns list of available parking slots
+ * @group MAIN - Returns list of available parking slots
  * @param {string} stack_id.body.required - parking stack id
  * @security JWT
  * @returns {object} 200 - Array of slots in the parking slot
@@ -61,8 +61,8 @@ router.post('/vehicle/getavailable', vehicleFormRequest('getAvailable'), vehicle
 /**
  * Returns Parking Stack
  * 
- * @route POST /getnearest
- * @group TICKET - Returns the stack whose slots have been cleared
+ * @route POST /clearStack
+ * @group MAIN - Returns the stack whose slots have been cleared
  * @param {string} stack_id.body.required - parking stack id
  * @security JWT
  * @returns {object} 200 - The stack
@@ -74,7 +74,7 @@ router.post('/clearStack', vehicleFormRequest('getAvailable'), vehicleController
  * Returns Ticket
  * 
  * @route POST /vehicle/park
- * @group TICKET - Returns the ticket when a user parks
+ * @group MAIN - Returns the ticket when a user parks
  * @param {string} stack_id.body.required - parking stack id
  * @param {string} slot_id.body.required - parking slot id
  * @security JWT
@@ -87,7 +87,7 @@ router.post('/vehicle/park', vehicleFormRequest('park'), vehicleController.park)
  * Returns Ticket
  * 
  * @route POST /vehicle/reserve
- * @group TICKET - Returns the ticket when a user reserves
+ * @group MAIN - Returns the ticket when a user reserves
  * @param {string} stack_id.body.required - parking stack id
  * @param {string} slot_id.body.required - parking slot id
  * @security JWT
@@ -100,7 +100,7 @@ router.post('/vehicle/park', vehicleFormRequest('park'), vehicleController.park)
  * Returns Ticket
  * 
  * @route POST /vehicle/park
- * @group TICKET - Returns the ticket when a leaves
+ * @group MAIN - Returns the ticket when a leaves
  * @param {string} ticket_id.body.required - ticket id of parking
  * @security JWT
  * @returns {object} 200 - The ticket
