@@ -6,9 +6,9 @@ const authController = require('../controllers/auth.controller');
 const companyController = require('../controllers/company.auth.controller');
 
 /* GET users listing. */
-router.post('/login', authController.login);
-router.post('/loginCompany', companyController.login)
-router.post('/signup',authFormRequest('createUser'), authController.signup);
+router.post('/login', authFormRequest('loginUser'), authController.login);
+router.post('/loginCompany', authFormRequest('loginUser'), companyController.login)
+router.post('/signup', authFormRequest('createUser'), authController.signup);
 
 
 module.exports = router;
