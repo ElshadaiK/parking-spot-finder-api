@@ -38,8 +38,8 @@ router.get('/parking_lot/status', hasPermissions(['view slot', 'view any slot'])
  * 
  * @route POST /getnearest
  * @group TICKET - Returns list of parking stacks
- * @param {string} longitude.path.required - user longitude
- * @param {string} latitude.path.required - user latitude
+ * @param {string} longitude.body.required - user longitude
+ * @param {string} latitude.body.required - user latitude
  * @security JWT
  * @returns {object} 200 - Array of stacks sorted by distance from current position
  * @returns {Error}  default - Unexpected error
@@ -51,7 +51,7 @@ router.post('/getnearest', vehicleFormRequest('getNearest'), vehicleController.g
  * 
  * @route POST /vehicle/getavailable
  * @group TICKET - Returns list of available parking slots
- * @param {string} stack_id.path.required - parking stack id
+ * @param {string} stack_id.body.required - parking stack id
  * @security JWT
  * @returns {object} 200 - Array of slots in the parking slot
  * @returns {Error}  default - Unexpected error
@@ -63,7 +63,7 @@ router.post('/vehicle/getavailable', vehicleFormRequest('getAvailable'), vehicle
  * 
  * @route POST /getnearest
  * @group TICKET - Returns the stack whose slots have been cleared
- * @param {string} stack_id.path.required - parking stack id
+ * @param {string} stack_id.body.required - parking stack id
  * @security JWT
  * @returns {object} 200 - The stack
  * @returns {Error}  default - Unexpected error
@@ -75,8 +75,8 @@ router.post('/clearStack', vehicleFormRequest('getAvailable'), vehicleController
  * 
  * @route POST /vehicle/park
  * @group TICKET - Returns the ticket when a user parks
- * @param {string} stack_id.path.required - parking stack id
- * @param {string} slot_id.path.required - parking slot id
+ * @param {string} stack_id.body.required - parking stack id
+ * @param {string} slot_id.body.required - parking slot id
  * @security JWT
  * @returns {object} 200 - The ticket
  * @returns {Error}  default - Unexpected error
@@ -88,8 +88,8 @@ router.post('/vehicle/park', vehicleFormRequest('park'), vehicleController.park)
  * 
  * @route POST /vehicle/reserve
  * @group TICKET - Returns the ticket when a user reserves
- * @param {string} stack_id.path.required - parking stack id
- * @param {string} slot_id.path.required - parking slot id
+ * @param {string} stack_id.body.required - parking stack id
+ * @param {string} slot_id.body.required - parking slot id
  * @security JWT
  * @returns {object} 200 - The ticket
  * @returns {Error}  default - Unexpected error
@@ -101,7 +101,7 @@ router.post('/vehicle/park', vehicleFormRequest('park'), vehicleController.park)
  * 
  * @route POST /vehicle/park
  * @group TICKET - Returns the ticket when a leaves
- * @param {string} ticket_id.path.required - ticket id of parking
+ * @param {string} ticket_id.body.required - ticket id of parking
  * @security JWT
  * @returns {object} 200 - The ticket
  * @returns {Error}  default - Unexpected error
