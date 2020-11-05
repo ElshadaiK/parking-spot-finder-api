@@ -15,10 +15,11 @@ exports.createParkingSlots = async function  (stack_id, slots_per_floor) {
             $in: 'FREE' // [1,2,3]
         }
     });
+    data = data[0]
     for (let index = 0; index < slots_per_floor; index++) {
        await slotModel.create({
             stack: stack_id, 
-            status: data 
+            status: data._id
         });
     }
 
