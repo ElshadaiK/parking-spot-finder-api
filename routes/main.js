@@ -74,7 +74,7 @@ router.post('/clearStack', vehicleFormRequest('getAvailable'), vehicleController
  * @returns {object} 200 - The ticket
  * @returns {Error}  default - Unexpected error
  */
-router.post('/vehicle/park', vehicleFormRequest('park'), vehicleController.park);
+router.post('/vehicle/park', hasPermissions(['park car']) && vehicleFormRequest('park'), vehicleController.park);
 
 /**
  * Returns Ticket
@@ -87,7 +87,7 @@ router.post('/vehicle/park', vehicleFormRequest('park'), vehicleController.park)
  * @returns {object} 200 - The ticket
  * @returns {Error}  default - Unexpected error
  */
- router.post('/vehicle/reserve', vehicleFormRequest('park'), vehicleController.reserve);
+ router.post('/vehicle/reserve', hasPermissions(['unpark car']) && vehicleFormRequest('park'), vehicleController.reserve);
 
 /**
  * Returns Ticket
@@ -99,6 +99,6 @@ router.post('/vehicle/park', vehicleFormRequest('park'), vehicleController.park)
  * @returns {object} 200 - The ticket
  * @returns {Error}  default - Unexpected error
  */
-router.post('/vehicle/exit', vehicleFormRequest('exit'), vehicleController.exit);
+router.post('/vehicle/exit', hasPermissions(['unpark car']) && vehicleFormRequest('exit'), vehicleController.exit);
 
 module.exports = router;
