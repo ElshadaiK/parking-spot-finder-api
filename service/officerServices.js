@@ -1,7 +1,6 @@
 const { pick } = require('lodash')
 const officerModel = require('../models/officer-model');
 const roleModel = require('../models/role-model');
-const { findCompanyById } = require('./companyService');
 
 
 exports.findAllOfficers = async function (req, res){
