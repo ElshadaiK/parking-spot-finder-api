@@ -27,7 +27,7 @@ exports.getParkings = async function (param){
           }
         }
       }
-    ).exec()
+    ).populate({path: "company", select: "name-_id"})
     return theNearest 
 }
 /**
@@ -106,7 +106,7 @@ exports.getAvailable = async function (param) {
 
   const the_stack = await slotModel.find({
     stack: parkingLotId, status: data
-  }).populate('status', 'statusName' );
+  }).populate({path: 'status', select: 'statusName-_id' });
   return the_stack
 
   } 

@@ -75,6 +75,7 @@ exports.insertCompany = async function (req, res){
 }
 exports.updateACompany = async function(req, res){
     try {
+        const { user} = req
         let company = await companyModel.findById(req.params.id)
         if(company) {
             company = await companyModel.updateOne({_id: company._id}, req.body)
