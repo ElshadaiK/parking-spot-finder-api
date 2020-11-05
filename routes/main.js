@@ -1,12 +1,10 @@
 var router = require("express-promise-router")();
 
 const { hasPermissions } = require('../middlewares/auth');
+const  {vehicleFormRequest} = require('../middlewares/form-request/vehicle');
 
 const parkingLotController = require('../controllers/parkinglot.controller')
 const vehicleController = require('../controllers/vehicle.controller')
-const ticketController = require('../controllers/ticket.controller')
-
-const { validate } = require('../middlewares/index')
 
 /**
  * @typedef TICKET
@@ -46,7 +44,7 @@ router.get('/parking_lot/status', hasPermissions(['view slot', 'view any slot'])
  * @returns {object} 200 - Array of stacks sorted by distance from current position
  * @returns {Error}  default - Unexpected error
  */
-router.post('/getnearest',  vehicleController.getParkingsNear);
+router.post('/getnearest', vehicleFormRequest('getNearest'), vehicleController.getParkingsNear);
 
 /**
  * Returns Parking Slots
@@ -58,7 +56,7 @@ router.post('/getnearest',  vehicleController.getParkingsNear);
  * @returns {object} 200 - Array of slots in the parking slot
  * @returns {Error}  default - Unexpected error
  */
-router.post('/vehicle/getavailable',  vehicleController.getAvailableSlots);
+router.post('/vehicle/getavailable', vehicleFormRequest('getAvailable'), vehicleController.getAvailableSlots);
 
 /**
  * Returns Parking Stack
@@ -70,7 +68,7 @@ router.post('/vehicle/getavailable',  vehicleController.getAvailableSlots);
  * @returns {object} 200 - The stack
  * @returns {Error}  default - Unexpected error
  */
-router.post('/clearStack',  vehicleController.clear);
+router.post('/clearStack', vehicleFormRequest('getAvailable'), vehicleController.clear);
 
 /**
  * Returns Ticket
@@ -83,7 +81,7 @@ router.post('/clearStack',  vehicleController.clear);
  * @returns {object} 200 - The ticket
  * @returns {Error}  default - Unexpected error
  */
-router.post('/vehicle/park',  vehicleController.park);
+router.post('/vehicle/park', vehicleFormRequest('park'), vehicleController.park);
 
 /**
  * Returns Ticket
@@ -96,7 +94,7 @@ router.post('/vehicle/park',  vehicleController.park);
  * @returns {object} 200 - The ticket
  * @returns {Error}  default - Unexpected error
  */
- router.post('/vehicle/reserve',  vehicleController.reserve);
+ router.post('/vehicle/reserve', vehicleFormRequest('park'), vehicleController.reserve);
 
 /**
  * Returns Ticket
@@ -108,8 +106,6 @@ router.post('/vehicle/park',  vehicleController.park);
  * @returns {object} 200 - The ticket
  * @returns {Error}  default - Unexpected error
  */
-router.post('/vehicle/exit',  vehicleController.exit);
-
-router.get('/ticket', hasPermissions(['get ticket']) && validate('ticketUser'), ticketController.getTickets);
+router.post('/vehicle/exit', vehicleFormRequest('exit'), vehicleController.exit);
 
 module.exports = router;
