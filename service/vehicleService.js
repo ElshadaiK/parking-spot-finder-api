@@ -105,7 +105,7 @@ exports.getAvailable = async function (param) {
 });
 
   const the_stack = await slotModel.find({
-    stack: parkingLotId, status: data
+    stack: parkingLotId, status: data._id
   }).populate({path: 'status', select: 'statusName-_id' });
   return the_stack
 
@@ -174,6 +174,7 @@ exports.emptyTheStack = async function(param){
           $in: 'FREE' 
       }
   });
+  data = data[0]
   const updatedSlots = await slotModel.updateMany({stack: parkingLotId}, {status: data._id})
     return updatedStack
 }
