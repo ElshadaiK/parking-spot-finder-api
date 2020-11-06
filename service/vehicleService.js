@@ -55,7 +55,7 @@ const ticket = await ticketModel.create({
   exit_at: "",
   price_per_hour : price
 });
-  const updatedSlot = await slotModel.findByIdAndUpdate(parkingSlotId, {status : data, occupied_by: ticket._id})
+  const updatedSlot = await slotModel.findByIdAndUpdate(parkingSlotId, {status : data._id, occupied_by: ticket._id})
 
 
   return ticket
@@ -85,7 +85,7 @@ const ticket = await ticketModel.create({
   exit_at: "",
   price_per_hour : price
 });
-  const updatedSlot = await slotModel.findByIdAndUpdate(parkingSlotId, {status : data, occupied_by: ticket._id})
+  const updatedSlot = await slotModel.findByIdAndUpdate(parkingSlotId, {status : data._id, occupied_by: ticket._id})
 
 
   return ticket
@@ -147,7 +147,7 @@ exports.exit = async function  (param) {
           $in: 'FREE' // [1,2,3]
       }
   });
-  const updatedSlot = await slotModel.findByIdAndUpdate(parkingSlotId, {status : data, occupied_by: null})
+  const updatedSlot = await slotModel.findByIdAndUpdate(parkingSlotId, {status : data._id, occupied_by: null})
 
     return the_updated_ticket
 }
