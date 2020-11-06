@@ -176,7 +176,7 @@ exports.emptyTheStack = async function(param){
       }
   });
   data = data[0]
-  const updatedSlots = await slotModel.updateMany({stack: parkingLotId}, {status: data._id})
+  const updatedSlots = await slotModel.updateMany({stack: parkingLotId}, {status: data._id, occupied_by: null})
     return updatedStack
 }
 
