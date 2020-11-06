@@ -23,10 +23,10 @@ spec:
           - name: MONGO_URI
             valueFrom:
                 secretKeyRef:
-                  name: mongo-secret
+                  name: car-secret
                   key: MONGODB_URL
           - name: NODE_ENV
-            value: production
+            value: development
           - name: API_PATH
             value: /
         resources:
