@@ -4,7 +4,7 @@ const path = require('path');
 require('dotenv-safe').config({
   allowEmptyValues: true, // allow null env, this is just for deployment 
   // path: path.join(__dirname, '../.env'),
-  path: require('find-config')('.env'),
+  path: __dirname+'../.env',
   sample: path.join(__dirname, '../.env.example'),
 });
 
