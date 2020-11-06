@@ -104,13 +104,37 @@ router.post('/vehicle/park', hasPermissions(['park car']) && vehicleFormRequest(
 /**
  * Returns Ticket
  * 
- * @route POST /main/vehicle/exit
+ * @route POST /main/vehicle/exitByTicket
  * @group MAIN - Returns the ticket when a leaves
  * @param {string} ticket_id.body.required - ticket id of parking
  * @security JWT
  * @returns {object} 200 - The ticket
  * @returns {Error}  default - Unexpected error
  */
-router.post('/vehicle/exit', hasPermissions(['unpark car']) && vehicleFormRequest('exit'), vehicleController.exit);
+router.post('/vehicle/exitByTicket', hasPermissions(['unpark car']) && vehicleFormRequest('exitByTicket'), vehicleController.exitTicket);
+
+/**
+ * Returns Ticket
+ * 
+ * @route POST /main/exitByPlate
+ * @group MAIN - Returns the ticket when a leaves
+ * @param {string} ticket_id.body.required - ticket id of parking
+ * @security JWT
+ * @returns {object} 200 - The ticket
+ * @returns {Error}  default - Unexpected error
+ */
+ router.post('/exitByPlate', vehicleFormRequest('exitByPlate'),  vehicleController.exitPlate);
+
+/**
+* Returns Ticket
+* 
+* @route POST /main/exitByPlate
+* @group MAIN - Returns the ticket when a leaves
+* @security JWT
+* @returns {object} 200 - The ticket
+* @returns {Error}  default - Unexpected error
+*/
+router.post('/getActiveTickets',  vehicleController.getActiveTickets);
+
 
 module.exports = router;

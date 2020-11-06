@@ -144,7 +144,7 @@ exports.getOccupied = async function (param) {
 /**
  * @param {Number} param.ticketId
  */
-exports.exit = async function  (param) {
+exports.exitTicket = async function  (param) {
   const { the_ticket } = param
   const exit_time = Date.now()
   const price_calculated = ((exit_time - the_ticket.park_at)/3600000) * the_ticket.price_per_hour;

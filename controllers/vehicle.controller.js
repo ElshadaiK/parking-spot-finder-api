@@ -177,7 +177,7 @@ exports.park = async (req, res, next) => {
 }
 }
 
-exports.exit = async (req, res, next) => {
+exports.exitTicket = async (req, res, next) => {
   const {
     ticketId
   } = req.body
@@ -191,7 +191,7 @@ exports.exit = async (req, res, next) => {
       const the_stack_id = the_slot.stack[0];
         
     
-      const ticketLeave = await vehicleService.exit({the_ticket})
+      const ticketLeave = await vehicleService.exitTicket({the_ticket})
       const availables = await vehicleService.getAvailable({
         the_stack_id
       });
@@ -205,6 +205,52 @@ exports.exit = async (req, res, next) => {
       throw new Error("Ticket already processed")
     }
 
+  } catch (err) {
+        res.status(404).json({
+            error: true,
+            message: err.message
+        });
+    }
+}
+exports.exitPlate = async (req, res, next) => {
+  const {user} = req
+  const {
+    plate_no
+  } = req.body
+
+  try {
+    const companyId = user.data.company
+    const the_stacks = await parkingLotStackModel.find({
+      company: companyId
+    });
+    const the_slots = await parkingSlotModel.find({
+      stack: {
+        $in: the_stacks // [1,2,3]
+      } 
+    });
+    const the_ticket = await ticketModel.findOne({
+      plate_number: plate_no,
+      ticket_status: "occupied",
+      slot_id: {
+        $in: the_slots // [1,2,3]
+      } 
+    });
+    
+    if (!the_ticket) throw new Error('ticket not found')
+    const the_slot = await parkingSlotModel.findById(the_ticket.slot_id);
+      const the_stack_id = the_slot.stack[0];
+        
+    
+      const ticketLeave = await vehicleService.exitTicket({the_ticket})
+      const availables = await vehicleService.getAvailable({
+        the_stack_id
+      });
+
+      await vehicleService.checkTheStack(the_slot._id, availables)
+
+      res.json(ticketLeave);
+      next();
+    
   } catch (err) {
         res.status(404).json({
             error: true,
@@ -226,7 +272,25 @@ exports.clear = async (req, res, next) => {
           const ticket = await vehicleService.emptyTheStack({
             parkingLotId
           });
+
+          // Updating all tickets when cleared
+
+          const the_slots = await parkingSlotModel.find({
+            stack: {
+              $in: the_stack // [1,2,3]
+            } 
+          });
+          const updatedTickets = await ticketModel.find(
+            {slot_id: {
+                $in: the_slots // [1,2,3]
+              } 
+            });
+          for (let index = 0; index < updatedTickets.length; index++) {
+            const the_ticket = updatedTickets[index]
+            const ticketLeave = await vehicleService.exitTicket({the_ticket})
       
+          }
+  
           res.json(ticket);
           next();
        
@@ -335,5 +399,39 @@ exports.getAllSlots = async(req, res, next) => {
           message: err.message
       });
 }
+}
+exports.getActiveTickets = async(req, res, next) => {
+  const {user} = req
+  const {
+    plate_no
+  } = req.body
+
+  try {
+    const companyId = user.data.company
+    const the_stacks = await parkingLotStackModel.find({
+      company: companyId
+    });
+    const the_slots = await parkingSlotModel.find({
+      stack: {
+        $in: the_stacks // [1,2,3]
+      } 
+    });
+    const the_tickets = await ticketModel.find({
+      ticket_status: "occupied",
+      slot_id: {
+        $in: the_slots // [1,2,3]
+      } 
+    });
+    
+    
+      res.json(the_tickets);
+      next();
+    
+  } catch (err) {
+        res.status(404).json({
+            error: true,
+            message: err.message
+        });
+    }
 }
 

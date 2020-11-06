@@ -17,10 +17,14 @@ exports.vehicleFormRequest = schemaName => async (req,res,next) => {
                 parkingSlotId: Joi.string().required(),
                 plate_number: Joi.number()
             }),
-        exit: () => 
+        exitByTicket: () => 
             Joi.object({
                 ticketId: Joi.string().required(),
             }),
+        exitByPlate: () =>
+            Joi.object({
+                plate_no: Joi.string().required()
+            })
     }
     try {
        const {error } =  validationObjects[schemaName]().validate(req.body)
