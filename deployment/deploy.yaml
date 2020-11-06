@@ -24,7 +24,7 @@ spec:
             valueFrom:
                 secretKeyRef:
                   name: car-secret
-                  key: MONGODB_URL
+                  key: MONGODB_URI
           - name: NODE_ENV
             value: development
           - name: API_PATH
