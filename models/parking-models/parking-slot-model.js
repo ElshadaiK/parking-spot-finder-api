@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const ParkingSlot = new mongoose.Schema({
 
   stack: { type: mongoose.Schema.Types.ObjectId, ref: 'ParkingLotStack' },
+  description: {type: String},
   status: { type: mongoose.Schema.Types.ObjectId, ref: 'ParkingSlotStatus' },
   occupied_by : { type: mongoose.Schema.Types.ObjectId, ref: 'Ticket' },
 
