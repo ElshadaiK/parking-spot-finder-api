@@ -174,7 +174,7 @@ exports.emptyTheStack = async function(param){
           $in: 'FREE' 
       }
   });
-  const updatedSlots = await slotModel.updateMany({stack: parkingLotId}, {status: data})
+  const updatedSlots = await slotModel.updateMany({stack: parkingLotId}, {status: data._id})
     return updatedStack
 }
 
