@@ -28,6 +28,18 @@ router.get('/parking_lot/status', hasPermissions(['view slot', 'view any slot'])
 router.post('/getnearest', vehicleFormRequest('getNearest'), vehicleController.getParkingsNear);
 
 /**
+ * Returns al Parking Slots
+ * 
+ * @route POST /main/getallslots
+ * @group MAIN - Returns list of available parking slots
+ * @param {string} parkingLotId.body.required - parking stack id
+ * @security JWT
+ * @returns {object} 200 - Array of slots in the parking slot
+ * @returns {Error}  default - Unexpected error
+ */
+ router.post('/getallslots', vehicleController.getAllSlots);
+ 
+/**
  * Returns Parking Slots
  * 
  * @route POST /main/vehicle/getavailable

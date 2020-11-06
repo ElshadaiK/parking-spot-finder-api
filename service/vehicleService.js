@@ -94,23 +94,34 @@ const ticket = await ticketModel.create({
  * @param {Number} [param.parking_Stack_Id]
  * @returns {Parking Slots}
  */
-exports.getAvailable = async function (param) {
+ exports.getAllSlots = async function (param) {
   const {
     parkingLotId
   } = param
-  let data = await statusModel.find({
-    statusName: {
-        $in: 'FREE' // [1,2,3]
-    }
-});
-data = data[0]
-
+  
   const the_stack = await slotModel.find({
-    stack: parkingLotId, status: data._id
+    stack: parkingLotId
   }).populate({path: 'status', select: 'statusName-_id' });
   return the_stack
 
   } 
+exports.getAvailable = async function (param) {
+const {
+  parkingLotId
+} = param
+let data = await statusModel.find({
+  statusName: {
+      $in: 'FREE' // [1,2,3]
+  }
+});
+data = data[0]
+
+const the_stack = await slotModel.find({
+  stack: parkingLotId, status: data._id
+}).populate({path: 'status', select: 'statusName-_id' });
+return the_stack
+
+} 
 
 exports.getOccupied = async function (param) {
   const {

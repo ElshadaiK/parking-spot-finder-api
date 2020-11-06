@@ -301,5 +301,39 @@ exports.reserve = async(req, res, next) => {
       });
 }
 }
+exports.getAllSlots = async(req, res, next) => {
+  const { user } = req
+  let companyId = user.data.company ? user.data.company : user.data._id
 
+  const parkingLotId = await parkingLotStackModel.findOne({
+      company: {
+          $in: companyId // [1,2,3]
+      }
+    })
+
+  try {
+    if(user){
+      const the_stack = await parkingLotStackModel.findById(parkingLotId);
+      if(!the_stack){
+        throw new Error('Stack dosen\'t exist')   
+      }
+      const availables = await vehicleService.getAllSlots({
+            parkingLotId
+          });
+      
+          res.json(availables);
+          next();
+        
+    }
+    else{
+      throw new Error('You have to login first')
+    }
+  }
+    catch (err) {
+      res.status(404).json({
+          error: true,
+          message: err.message
+      });
+}
+}
 
