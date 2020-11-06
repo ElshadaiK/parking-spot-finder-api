@@ -42,7 +42,7 @@ exports.park = async function (param) {
     parkingSlotId,
     price
   } = param
-  let data = await statusModel.find({
+  let data = await statusModel.findOne({
     statusName: {
         $in: 'OCCUPIED' // [1,2,3]
     }
@@ -72,7 +72,7 @@ exports.reserve = async function (param) {
     parkingSlotId,
     price
   } = param
-  let data = await statusModel.find({
+  let data = await statusModel.findOne({
     statusName: {
         $in: 'PENDING' // [1,2,3]
     }
@@ -98,23 +98,25 @@ const ticket = await ticketModel.create({
   const {
     parkingLotId
   } = param
-  
-  const the_stack = await slotModel.find({
+  let the_stack = []
+for (let index = 0; index < parkingLotId.length; index++) {
+  const results = await slotModel.find({
     stack: parkingLotId
   }).populate({path: 'status', select: 'statusName-_id' });
-  return the_stack
-
+  the_stack.push(results)
+}
+return the_stack
+  
   } 
 exports.getAvailable = async function (param) {
 const {
   parkingLotId
 } = param
-let data = await statusModel.find({
+let data = await statusModel.findOne({
   statusName: {
       $in: 'FREE' // [1,2,3]
   }
 });
-data = data[0]
 
 const the_stack = await slotModel.find({
   stack: parkingLotId, status: data._id
@@ -127,7 +129,7 @@ exports.getOccupied = async function (param) {
   const {
     parkingLotId
   } = param
-  let data = await statusModel.find({
+  let data = await statusModel.findOne({
     statusName: {
         $in: 'OCCUPIED' // [1,2,3]
     }
@@ -154,7 +156,7 @@ exports.exit = async function  (param) {
 
   
     // update slot status
-    let data = await statusModel.find({
+    let data = await statusModel.findOne({
       statusName: {
           $in: 'FREE' // [1,2,3]
       }
@@ -181,12 +183,11 @@ exports.emptyTheStack = async function(param){
     {'$set': {full_status: false}},
     {new: true}
     );
-    let data = await statusModel.find({
+    let data = await statusModel.findOne({
       statusName: {
           $in: 'FREE' 
       }
   });
-  data = data[0]
   const updatedSlots = await slotModel.updateMany({stack: parkingLotId}, {status: data._id, occupied_by: null})
     return updatedStack
 }

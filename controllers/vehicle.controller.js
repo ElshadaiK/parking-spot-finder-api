@@ -305,7 +305,7 @@ exports.getAllSlots = async(req, res, next) => {
   const { user } = req
   let companyId = user.data.company ? user.data.company : user.data._id
 
-  const parkingLotId = await parkingLotStackModel.findOne({
+  const parkingLotId = await parkingLotStackModel.find({
       company: {
           $in: companyId // [1,2,3]
       }
@@ -313,7 +313,7 @@ exports.getAllSlots = async(req, res, next) => {
 
   try {
     if(user){
-      const the_stack = await parkingLotStackModel.findById(parkingLotId);
+      const the_stack = await parkingLotStackModel.find({_id: {$in: parkingLotId}});
       if(!the_stack){
         throw new Error('Stack dosen\'t exist')   
       }
@@ -321,7 +321,7 @@ exports.getAllSlots = async(req, res, next) => {
             parkingLotId
           });
       
-          res.json(availables);
+          res.json(availables[0]);
           next();
         
     }
