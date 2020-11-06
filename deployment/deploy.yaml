@@ -34,11 +34,11 @@ spec:
             memory: "500Mi"
             cpu: "100m"
         imagePullPolicy: Always
-#        readinessProbe:
-#          httpGet:
-#            path: /
-#            port: 8000
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 3000
         ports:
         - name: car-api-port
-          containerPort: 80
+          containerPort: 3000
 
