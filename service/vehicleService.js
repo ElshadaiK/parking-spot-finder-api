@@ -103,6 +103,7 @@ exports.getAvailable = async function (param) {
         $in: 'FREE' // [1,2,3]
     }
 });
+data = data[0]
 
   const the_stack = await slotModel.find({
     stack: parkingLotId, status: data._id
