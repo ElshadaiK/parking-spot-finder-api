@@ -1,7 +1,6 @@
 const { pick } = require('lodash')
-const officerModel = require('../models/officer-model');
+const userModel = require('../models/user-model');
 const roleModel = require('../models/role-model');
-const { findCompanyById } = require('./companyService');
 
 
 exports.findAllOfficers = async function (req, res){
@@ -29,7 +28,7 @@ exports.findAllOfficers = async function (req, res){
             limit: req.query.limit || 10,
             populate: { path: 'roles', populate: {path: 'permissions'}}
         }
-        const officer = await officerModel.paginate(query,options)
+        const officer = await userModel.paginate(query,options)
 
         res.json(officer)
 
@@ -42,7 +41,7 @@ exports.findAllOfficers = async function (req, res){
 }
 exports.findOfficerById = async function(req, res){
     try {
-        const officer = await officerModel.findById(req.params.id)
+        const officer = await userModel.findById(req.params.id)
         res.json(officer)
     } catch (error) {
         res.status(404).json({
@@ -60,7 +59,8 @@ exports.insertOfficer = async function (req, res){
         })
         const {user} = req
         const companyId = user.data._id
-        const officer = await officerModel.create({...req.body, roles: data, company: companyId})
+        const companyName = user.data.name
+        const officer = await userModel.create({...req.body, email: `${req.body.name}@${companyName}.com`, roles: data, company: companyId})
 
         res.json(officer)
     } catch (error) {
@@ -74,9 +74,9 @@ exports.insertOfficer = async function (req, res){
 exports.updateOfficer = async function(req, res){
     
     try {
-        let officer = await officerModel.findById(req.params.id)
+        let officer = await userModel.findById(req.params.id)
         if(officer) {
-            officer = await officerModel.updateOne({_id: officer._id}, req.body)
+            officer = await userModel.updateOne({_id: officer._id}, req.body)
             return res.json(officer)
         }
 
@@ -94,9 +94,9 @@ exports.updateOfficer = async function(req, res){
 
 exports.deleteOfficer = async function(req, res){
     try {
-        let officer = await officerModel.findById(req.params.id)
+        let officer = await userModel.findById(req.params.id)
         if(officer) {
-            await officerModel.remove({
+            await userModel.remove({
                 _id: officer._id
             })
             return res.json(officer)
@@ -113,7 +113,7 @@ exports.deleteOfficer = async function(req, res){
 }
 exports.findOfficerByName = async function(req, res){
     try {
-        const officer = await officerModel.find({fullName: {$regex:`^${req.params.name}`, $options:'i'}})
+        const officer = await userModel.find({fullName: {$regex:`^${req.params.name}`, $options:'i'}})
         res.json(officer)
     } catch (error) {
         res.status(404).json({

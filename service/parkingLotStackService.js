@@ -44,4 +44,18 @@ exports.getParkingLotStacks = async function  (req, res) {
 
 }
 
+exports.deleteParkingLotStacks = async function (id, slots_per_floor, floors, rank_per_floor, Clocation, Cprice, res, floor_index){
+  try {
+    let deletedStack = await parkingLotStackModel.remove({
+        company: id, 
+        floor: floor_index,    
+      });
+      await slotService.removeSlots(deletedStack._id, slots_per_floor)
+
+  } catch (error) {
+
+    throw new Error("Couldn't delete parking lot stack")
+
+  }
+}
 

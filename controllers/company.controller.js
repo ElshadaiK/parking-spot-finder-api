@@ -28,7 +28,34 @@ exports.createProfile = async (req, res) => {
 }
 
 exports.updateProfile = async (req, res) => {
-    await companyService.updateACompany(req, res);
+    const {user} = req
+    const company_info = await companyService.updateACompany(req, res);
+    let slotsPerFloor = parseInt(company_info[1])
+    let floor = parseInt(company_info[2])
+    // If they change the floor number
+    if(user.data.floor < floor){
+        for (let floorIndex = user.data.floor; floorIndex < floor; floorIndex++) {
+            await stackService.createParkingLotStacks(...company_info, res, floorIndex);
+            
+        }
+    }
+    else{
+        if(user.data.floor > floor){
+            for (let floorIndex = user.data.floor; floorIndex > floor; floorIndex--) {
+                await stackService.delete(...company_info, res, floorIndex);
+                
+            }
+        }
+    }
+    // If they change the slot number
+    if(user.data.slots_per_floor < slotsPerFloor){
+        
+    }
+    else{
+        if(user.data.slots_per_floor > slotsPerFloor){
+            
+        }
+    }
 }
 
 exports.removeProfile = async (req, res) => {

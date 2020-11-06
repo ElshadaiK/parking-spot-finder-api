@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 const ParkingLotStack = new mongoose.Schema({
 
-  company: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Companies' }],
+  company: { type: mongoose.Schema.Types.ObjectId, ref: 'Companies' },
 
   location: {
     type: {
