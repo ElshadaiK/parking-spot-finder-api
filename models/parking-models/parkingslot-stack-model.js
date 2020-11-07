@@ -28,7 +28,8 @@ const ParkingLotStack = new mongoose.Schema({
 
   slots: {type: Number},
   price: {type: Number},
-  rating: {type: Number}
+  rating: {type: Number},
+  distance: {}
 
 },{timestamps: {createdAt: 'created_at', modifiedAt: 'modified_at'}
 });

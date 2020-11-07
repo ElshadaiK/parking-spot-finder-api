@@ -1,4 +1,5 @@
 const parkingLotService = require('../service/parkingLotStackService');
+const slotService = require('../service/slotServices')
 
 
 exports.getParkingLotStacks = async (req, res, next) => {
@@ -13,4 +14,10 @@ exports.getParkingLotStacks = async (req, res, next) => {
             message: error
     })
   }
+}
+exports.updateSlots = async function (req, res, next){
+  const {stack_id} = req.body
+  const result = await slotService.updateSlotsDescription(stack_id);
+  res.json(result)
+  next()
 }

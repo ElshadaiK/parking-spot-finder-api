@@ -136,5 +136,7 @@ router.post('/vehicle/exitByTicket', hasPermissions(['unpark car']) && vehicleFo
 */
 router.post('/getActiveTickets',  vehicleController.getActiveTickets);
 
+router.post('/description', parkingLotController.updateSlots)
+
 
 module.exports = router;

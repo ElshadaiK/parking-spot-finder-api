@@ -1,25 +1,22 @@
 const slotModel = require('../models/parking-models/parking-slot-model');
 const statusModel = require('../models/parking-models/parking-slot-status-model');
+const stackModel = require('../models/parking-models/parkingslot-stack-model')
 
-/**
- * @param {String} param.name
- * @param {Number} param.rank integer number
- * @param {Object} param.nSlotsKey
- * @returns {ParkingLot}
- */
 
+const descriptions = ["North", "South", "East", "West", "North-eastern", "South-eastern", "North-western", "South-western"];   
 exports.createParkingSlots = async function  (stack_id, slots_per_floor) {
   try {
-      let data = await statusModel.find({
+      let data = await statusModel.findOne({
         statusName: {
             $in: 'FREE' // [1,2,3]
         }
     });
-    data = data[0]
     for (let index = 0; index < slots_per_floor; index++) {
+      const alphabet = ((index % 36)+10).toString(36).toUpperCase()
        await slotModel.create({
             stack: stack_id, 
-            status: data._id
+            status: data._id,
+            description: `${descriptions[index % descriptions.length]}, Parking Slot ${alphabet}`
         });
     }
 
@@ -43,11 +40,22 @@ exports.removeSlots = async function  (stack_id, slots_per_floor) {
 
   }
 }
-
-/**
- * @param {Object} [param={}]
- * @returns {ParkingLotStack[]}
- */
+exports.updateSlotsDescription = async function (stack_id){
+  const the_slots = await slotModel.find({
+    stack: stack_id
+  });
+  if(!the_slots) throw new Error("Slots not found with the stack Id")
+  the_slots.forEach(async (slot, index) => {
+    const alphabet = ((index % 36)+10).toString(36).toUpperCase()
+    await slotModel.updateOne(
+      {_id: slot._id},
+      {
+        description: `${descriptions[index % descriptions.length]}, Parking Slot ${alphabet}`
+      }
+      );
+  });
+  return "Updated successfully"
+}
 exports.getParkingSlots = async function  (req, res) {
       try {
         const stacks = await parkingLotStackModel.find({}, null, {sort : '-createdAt'})
