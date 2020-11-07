@@ -17,9 +17,17 @@ exports.getParkingLotStacks = async (req, res, next) => {
 }
 exports.updateSlots = async function (req, res, next){
   const {stack_id} = req.body
-  const the_stack = await stackModel.findone({_id: stack_id})
-  if(!the_stack) throw new Error("Stack not found")
-  const result = await slotService.updateSlotsDescription(stack_id, the_stack.floor);
-  res.json(result)
-  next()
+  try{
+    const the_stack = await stackModel.findone({_id: stack_id})
+    if(!the_stack) throw new Error("Stack not found")
+    const result = await slotService.updateSlotsDescription(stack_id, the_stack.floor);
+    res.json(result)
+    next()
+  }
+    catch (err) {
+      res.status(404).json({
+          error: true,
+          message: err.message
+      });
+}
 }
