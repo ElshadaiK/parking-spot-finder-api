@@ -6,7 +6,7 @@ exports.getParkingLotStacks = async (req, res, next) => {
   const {user} = req
   const companyId = user.data.company
   try {
-    const parkingLotStacks = await stackModel.find({company: companyId})
+    const parkingLotStacks = await stackModel.find({company: companyId, full_status: false})
 
     res.json(parkingLotStacks);
   } catch (err) {
