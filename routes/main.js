@@ -136,6 +136,8 @@ router.post('/vehicle/exitByTicket', hasPermissions(['unpark car']) && vehicleFo
 */
 router.post('/getActiveTickets',  vehicleController.getActiveTickets);
 
+router.post('/getStacks', parkingLotController.getParkingLotStacks);
+
 router.post('/description', parkingLotController.updateSlots)
 
 

@@ -1,11 +1,12 @@
-const parkingLotService = require('../service/parkingLotStackService');
 const slotService = require('../service/slotServices')
 const stackModel = require('../models/parking-models/parkingslot-stack-model')
 
 exports.getParkingLotStacks = async (req, res, next) => {
 
+  const {user} = req
+  const companyId = user.data.company
   try {
-    const parkingLotStacks = await parkingLotService.getParkingLotStacks()
+    const parkingLotStacks = await stackModel.find({company: companyId})
 
     res.json(parkingLotStacks);
   } catch (err) {
