@@ -9,7 +9,7 @@ spec:
     serviceName: car-api-service
     servicePort: 3000
   rules:
-  - host: car-api.et6da.gebeya.co
+  - host: car-api.car.et6da.gebeya.co
     http:
       paths:
       - backend:
