@@ -131,6 +131,18 @@ exports.park = async (req, res, next) => {
       if(!the_stack){
         throw new Error('Stack dosen\'t exist')   
       }
+      const the_slots = await parkingSlotModel.find({
+        stack: parkingLotId
+      });
+
+      const isTicketProcessed = await ticketModel.findOne({
+        plate_number,
+        slot_id: {
+          $in: the_slots
+        },
+        ticket_status: "occupied"
+      });
+      if(isTicketProcessed) throw new Error("User already parked")
       const fullStatus = await vehicleService.isStackFull(the_stack)
       if(!fullStatus){
 
