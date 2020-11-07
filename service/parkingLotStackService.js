@@ -17,7 +17,7 @@ exports.createParkingLotStacks = async function  (id, slots_per_floor, floors, r
         slots: slots_per_floor,
         price: Cprice    
       });
-      await slotService.createParkingSlots(newStack._id, slots_per_floor)
+      await slotService.createParkingSlots(newStack._id, slots_per_floor, floor_index)
 
   } catch (error) {
 

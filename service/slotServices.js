@@ -1,10 +1,9 @@
 const slotModel = require('../models/parking-models/parking-slot-model');
 const statusModel = require('../models/parking-models/parking-slot-status-model');
-const stackModel = require('../models/parking-models/parkingslot-stack-model')
 
 
 const descriptions = ["North", "South", "East", "West", "North-eastern", "South-eastern", "North-western", "South-western"];   
-exports.createParkingSlots = async function  (stack_id, slots_per_floor) {
+exports.createParkingSlots = async function  (stack_id, slots_per_floor, floor_index) {
   try {
       let data = await statusModel.findOne({
         statusName: {
@@ -16,7 +15,7 @@ exports.createParkingSlots = async function  (stack_id, slots_per_floor) {
        await slotModel.create({
             stack: stack_id, 
             status: data._id,
-            description: `${descriptions[index % descriptions.length]}, Parking Slot ${alphabet}`
+            description: `Floor ${floor_index}, ${descriptions[index % descriptions.length]}, Parking Slot ${alphabet}`
         });
     }
 
@@ -40,7 +39,7 @@ exports.removeSlots = async function  (stack_id, slots_per_floor) {
 
   }
 }
-exports.updateSlotsDescription = async function (stack_id){
+exports.updateSlotsDescription = async function (stack_id, floor_index){
   const the_slots = await slotModel.find({
     stack: stack_id
   });
@@ -50,7 +49,7 @@ exports.updateSlotsDescription = async function (stack_id){
     await slotModel.updateOne(
       {_id: slot._id},
       {
-        description: `${descriptions[index % descriptions.length]}, Parking Slot ${alphabet}`
+        description: `Floor ${floor_index}, ${descriptions[index % descriptions.length]}, Parking Slot ${alphabet}`
       }
       );
   });

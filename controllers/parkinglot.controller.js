@@ -1,6 +1,6 @@
 const parkingLotService = require('../service/parkingLotStackService');
 const slotService = require('../service/slotServices')
-
+const stackModel = require('../models/parking-models/parkingslot-stack-model')
 
 exports.getParkingLotStacks = async (req, res, next) => {
 
@@ -17,7 +17,9 @@ exports.getParkingLotStacks = async (req, res, next) => {
 }
 exports.updateSlots = async function (req, res, next){
   const {stack_id} = req.body
-  const result = await slotService.updateSlotsDescription(stack_id);
+  const the_stack = await stackModel.findById(stack_id)
+  if(!the_stack) throw new Error("Stack not found")
+  const result = await slotService.updateSlotsDescription(stack_id, the_stack.floor);
   res.json(result)
   next()
 }
