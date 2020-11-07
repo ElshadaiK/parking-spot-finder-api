@@ -9,6 +9,7 @@ exports.getParkingLotStacks = async (req, res, next) => {
     const parkingLotStacks = await stackModel.find({company: companyId, full_status: false})
 
     res.json(parkingLotStacks);
+    next()
   } catch (err) {
         res.status(404).json({
             error: true,
