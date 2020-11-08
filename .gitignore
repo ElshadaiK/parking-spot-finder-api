@@ -1,5 +1,6 @@
 .env
 config.env
-.log
+combined.log
+error.log
 
 /node_modules
