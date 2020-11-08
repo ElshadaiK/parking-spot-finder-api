@@ -38,8 +38,8 @@ spec:
           httpGet:
             path: /
             port: 3000
-          initialDelaySeconds: 300
-          periodSeconds: 30
+          # initialDelaySeconds: 300
+          # periodSeconds: 30
         ports:
         - name: car-api-port
           containerPort: 3000
