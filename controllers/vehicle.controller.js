@@ -22,7 +22,7 @@ exports.getParkingsNear = async (req, res, next) => {
     catch (err) {
       res.status(404).json({
           error: true,
-          message: err
+          message: err.message
       });
 }
 }
