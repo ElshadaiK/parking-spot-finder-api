@@ -26,6 +26,6 @@ RUN npm install
 # Copying rest of the application to app directory
 COPY . /app
 
-EXPOSE 3000
+# EXPOSE 3000
 # Starting the application using npm start
 CMD ["npm","start"]do
