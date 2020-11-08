@@ -128,14 +128,23 @@ router.post('/vehicle/exitByTicket', hasPermissions(['unpark car']) && vehicleFo
 /**
 * Returns Ticket
 * 
-* @route POST /main/exitByPlate
-* @group MAIN - Returns the ticket when a leaves
+* @route POST /main/getActiveTickets
+* @group MAIN - Returns the all active tickets in the stack
 * @security JWT
 * @returns {object} 200 - The ticket
 * @returns {Error}  default - Unexpected error
 */
 router.post('/getActiveTickets',  vehicleController.getActiveTickets);
 
+/**
+* Returns Stacks
+* 
+* @route POST /main/getActiveTickets
+* @group MAIN - Returns the all stacks in the company the PO works in
+* @security JWT
+* @returns {object} 200 - The array of stacks
+* @returns {Error}  default - Unexpected error
+*/
 router.post('/getStacks', parkingLotController.getParkingLotStacks);
 
 router.post('/description', parkingLotController.updateSlots)
