@@ -147,7 +147,5 @@ router.post('/getActiveTickets',  vehicleController.getActiveTickets);
 */
 router.post('/getStacks', parkingLotController.getParkingLotStacks);
 
-router.post('/description', parkingLotController.updateSlots)
-
 
 module.exports = router;
