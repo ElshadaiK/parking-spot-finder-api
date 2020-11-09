@@ -139,7 +139,7 @@ router.post('/getActiveTickets',  vehicleController.getActiveTickets);
 /**
 * Returns Stacks
 * 
-* @route POST /main/getActiveTickets
+* @route POST /main/getStacks
 * @group MAIN - Returns the all stacks in the company the PO works in
 * @security JWT
 * @returns {object} 200 - The array of stacks
