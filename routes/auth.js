@@ -12,7 +12,6 @@ const companyController = require('../controllers/company.auth.controller');
  * @group Auth 
  * @param {email} email.body.required - email of the user
  * @param {string} password.body.required - password of the user
- * @security JWT
  * @returns {object} 200 - User object
  * @returns {Error}  default - Unexpected error
  */
@@ -25,7 +24,6 @@ router.post('/login', authFormRequest('loginUser'), authController.login);
  * @group Auth 
  * @param {email} email.body.required - email of the company
  * @param {string} password.body.required - password of the company
- * @security JWT
  * @returns {object} 200 - Company object
  * @returns {Error}  default - Unexpected error
  */
@@ -37,7 +35,6 @@ router.post('/loginCompany', authFormRequest('loginUser'), companyController.log
  * @route POST /auth/signup/
  * @group Auth 
  * @param {USER.model} user.body.required - the new user
- * @security JWT
  * @returns {object} 200 - User object
  * @returns {Error}  default - Unexpected error
  */
