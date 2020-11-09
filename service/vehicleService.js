@@ -5,11 +5,6 @@ const ticketModel = require('../models/parking-models/ticket-model');
 const slotModel = require('../models/parking-models/parking-slot-model');
 const statusModel = require('../models/parking-models/parking-slot-status-model')
 
-/**
- * @param {Array} [param.location='']
- * @returns {Stacks}
- */
-
 exports.getParkings = async function (param){
   const {
     latitude, longitude
@@ -29,12 +24,7 @@ exports.getParkings = async function (param){
     ).populate({path: "company", select: "name-_id"})
     return theNearest 
 }
-/**
- * @param {String} [param.plate_number]
- * @param {Number} [param.parking_Stack_Id]
- * @param {Number} [param.parking_Lot_Id]
- * @returns {Ticket}
- */
+
 exports.park = async function (param) {
   const {
     plate_number,
@@ -59,12 +49,7 @@ const ticket = await ticketModel.create({
 
   return ticket
   } 
-/**
- * @param {String} [param.plate_number]
- * @param {Number} [param.parking_Stack_Id]
- * @param {Number} [param.parking_Lot_Id]
- * @returns {Ticket}
- */
+
 exports.reserve = async function (param) {
   const {
     plate_number,
@@ -89,10 +74,7 @@ const ticket = await ticketModel.create({
 
   return ticket
   } 
-  /**
- * @param {Number} [param.parking_Stack_Id]
- * @returns {Parking Slots}
- */
+
  exports.getAllSlots = async function (param) {
   const {
     parkingLotId
@@ -140,9 +122,7 @@ exports.getOccupied = async function (param) {
   return the_stack
 
   } 
-/**
- * @param {Number} param.ticketId
- */
+
 exports.exitTicket = async function  (param) {
   const { the_ticket } = param
   const exit_time = Date.now()
