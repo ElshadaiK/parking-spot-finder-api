@@ -5,9 +5,20 @@ const { hasPermissions } = require('../middlewares/auth');
 const companyController = require('../controllers/company.controller')
 
 /**
- * @typedef OFFICER
- * @property {string} username.required - A Unique user name
- * @property {string} company.required - Company's name
+ * @typedef ParkingLotStack
+ * @property {COMPANY.model} company.required - Company id
+ * @property {number} floor.required - Stack's floor number
+ */
+ /**
+ * @typedef ParkingSlotStatus
+ * @property {string} statusName.required - status name
+ */
+/**
+ * @typedef ParkingSlot
+ * @property {ParkingLotStack.model} stack.required - stack id
+ * @property {string} description.required - Slot's description
+ * @property {ParkingSlotStatus.model} status.required - Slot's status
+ * @property {TICKET.model} occupied_by.required - Slot's description
  */
 
 /**
