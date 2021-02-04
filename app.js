@@ -67,7 +67,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(jwt({ secret: jwt_key, algorithms: ['HS256']})
 .unless({path: routes.public})); // Auth
 
-
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    next();
+  });
 // login information state
 app.use('/', indexRouter);
 app.use('/users', usersRouter); // autho
