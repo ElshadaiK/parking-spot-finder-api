@@ -3,7 +3,7 @@ exports.routes = {
         '/',
         '/auth/login',
         '/auth/signup',
-        '/auth/logincompany',
+        '/auth/loginCompany',
         '/auth/forget-password',
         '/auth/reset-password'
     ]
