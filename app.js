@@ -64,13 +64,15 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // app.use('/api-docs-v2', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-app.use(jwt({ secret: jwt_key, algorithms: ['HS256']})
-.unless({path: routes.public})); // Auth
-
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     next();
   });
+
+app.use(jwt({ secret: jwt_key, algorithms: ['HS256']})
+.unless({path: routes.public})); // Auth
+
+
 // login information state
 app.use('/', indexRouter);
 app.use('/users', usersRouter); // autho
